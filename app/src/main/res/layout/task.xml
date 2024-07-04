@@ -16,31 +16,38 @@
             android:orientation="horizontal"
             android:layout_marginLeft="5dp"
             >
+
             <CheckBox
-                android:id = "@+id/todoCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:id="@+id/todoCheckBox"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                />
+
             <TextView
                 android:id = "@+id/todoTitle"
-                android:layout_width="320dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:text="HALO HALO HALO"
-                android:textSize="20dp"
+                android:textSize="25dp"
                 android:textStyle="bold"
-                android:layout_marginLeft="5dp" />
+                />
             <Button
                 android:id = "@+id/todoBtnEdit"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/baseline_edit_24"/>
+                android:drawableLeft="@drawable/baseline_edit_24"
+                android:contentDescription="edit_task"/>
         </LinearLayout>
         <TextView
             android:id = "@+id/todoDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="HALO HALO HALO"
+
             android:textSize="15dp"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="5dp"/>
@@ -50,7 +57,7 @@
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:layout_marginTop="5dp"
-            android:text="04/07/2024"
+
             android:drawableStart="@drawable/baseline_event_available_24"
             android:drawablePadding="8dp"
             android:layout_marginLeft="50dp"/>
