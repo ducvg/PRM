@@ -1,17 +1,31 @@
 package com.example.project.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 public class User {
+    @SerializedName("TaskId")
+    @Expose
     private int userId;
+    @SerializedName("TaskId")
+    @Expose
     private String username;
+    @SerializedName("TaskId")
+    @Expose
     private String email;
+    @SerializedName("TaskId")
+    @Expose
     private String password;
+    @SerializedName("TaskId")
+    @Expose
     private Date createdAt;
+    @SerializedName("TaskId")
+    @Expose
     private int role;
-    private Set<Task> tasks = new HashSet<>();
 
     public int getUserId() {
         return userId;
@@ -59,14 +73,6 @@ public class User {
 
     public void setRole(int role) {
         this.role = role;
-    }
-
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
     }
 
     public User(int userId, String username, String email, String password, Date createdAt, int role) {

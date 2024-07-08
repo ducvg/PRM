@@ -1,24 +1,41 @@
 package com.example.project.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Task implements Serializable {
+    @SerializedName("TaskId")
+    @Expose
     private int taskId;
+    @SerializedName("UserId")
+    @Expose
     private int userId;
+    @SerializedName("Title")
+    @Expose
     private String title;
+    @SerializedName("Description")
+    @Expose
     private String description;
+    @SerializedName("DueDate")
+    @Expose
     private Date dueDate;
+    @SerializedName("CreatedAt")
+    @Expose
     private Date createdAt;
+    @SerializedName("UpdatedAt")
+    @Expose
     private Date updatedAt;
+    @SerializedName("Status")
+    @Expose
     private int status;
+    @SerializedName("CategoryId")
+    @Expose
     private int categoryId;
-    private Category category;
-    private User user;
-    private Set<Attachment> attachments = new HashSet<>();
-    private Set<Subtask> subtasks = new HashSet<>();
 
     public int getTaskId() {
         return taskId;
@@ -92,39 +109,8 @@ public class Task implements Serializable {
         this.categoryId = categoryId;
     }
 
-    public Category getCategory() {
-        return category;
-    }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Set<Attachment> getAttachments() {
-        return attachments;
-    }
-
-    public void setAttachments(Set<Attachment> attachments) {
-        this.attachments = attachments;
-    }
-
-    public Set<Subtask> getSubtasks() {
-        return subtasks;
-    }
-
-    public void setSubtasks(Set<Subtask> subtasks) {
-        this.subtasks = subtasks;
-    }
-
-    public Task(int taskId, int userId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId, Category category, User user) {
+    public Task(int taskId, int userId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId) {
         this.taskId = taskId;
         this.userId = userId;
         this.title = title;
@@ -134,7 +120,5 @@ public class Task implements Serializable {
         this.updatedAt = updatedAt;
         this.status = status;
         this.categoryId = categoryId;
-        this.category = category;
-        this.user = user;
     }
 }
