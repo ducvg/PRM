@@ -8,22 +8,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class User {
-    @SerializedName("TaskId")
+    @SerializedName("UserId")
     @Expose
     private int userId;
-    @SerializedName("TaskId")
+    @SerializedName("Username")
     @Expose
     private String username;
     @SerializedName("TaskId")
     @Expose
     private String email;
-    @SerializedName("TaskId")
+    @SerializedName("Password")
     @Expose
     private String password;
-    @SerializedName("TaskId")
+    @SerializedName("CreatedAt")
     @Expose
     private Date createdAt;
-    @SerializedName("TaskId")
+    @SerializedName("Role")
     @Expose
     private int role;
 
