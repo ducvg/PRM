@@ -32,33 +32,46 @@
                 android:textSize="25dp"
                 android:textStyle="bold"
                 android:maxLines="1"/>
-
-            <Button
-                android:id="@+id/todoBtnEdit"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:contentDescription="edit_task"
-                android:drawableLeft="@drawable/baseline_edit_24" />
         </LinearLayout>
         <TextView
             android:id = "@+id/todoDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="HALO HALO HALO halo "
-            android:textSize="20dp"  
+            android:textSize="20dp"
             android:layout_marginLeft="55dp"
             android:layout_marginTop="5dp"
             android:maxLines="1"/>
-        <TextView
-            android:id = "@+id/todoDateTime"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:layout_marginTop="5dp"
-            android:drawableStart="@drawable/baseline_event_available_24"
-            android:drawablePadding="8dp"
+            android:orientation="horizontal"
             android:layout_marginLeft="55dp"
-            android:maxLines="1"/>
+            android:layout_marginTop="5dp"
+            android:textSize="25dp">
+
+            <TextView
+                android:id = "@+id/todoDateTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="20/07/2007"
+                android:drawableStart="@drawable/baseline_event_available_24"
+                android:drawablePadding="8dp"
+                android:maxLines="1"/>
+
+            <TextView
+                android:id="@+id/todoCategory"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:drawablePadding="8dp"
+                android:maxLines="1"
+                android:text="Category" />
+
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
