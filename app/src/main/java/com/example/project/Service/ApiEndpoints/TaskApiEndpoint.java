@@ -21,6 +21,9 @@ public interface TaskApiEndpoint {
     Call<Task> getTaskById(@Path("id") int taskId);
 
     @GET("task")
+    Call<ListResponse<Task>> getTask();
+
+    @GET("task")
     Call<ListResponse<Task>> getFilterTasks(@Query("$filter") String filter);
 
     @POST("task")

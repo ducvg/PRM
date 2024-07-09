@@ -6,6 +6,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class ListResponse<T> {
+    @SerializedName("@odata.context")
+    @Expose
+    private String odata;
+    
     @SerializedName("value")
     @Expose
     private List<T> data;
@@ -14,3 +18,4 @@ public class ListResponse<T> {
         return data;
     }
 }
+

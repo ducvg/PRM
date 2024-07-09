@@ -1,9 +1,6 @@
 package com.example.project.fragment;
 
-import static com.example.project.CalendarUtils.daysInWeekArray;
-
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,48 +26,35 @@ import com.example.project.Upcoming.UpcomingTaskAdapter;
 import com.example.project.model.ListResponse;
 import com.example.project.model.Task;
 
-import org.w3c.dom.Comment;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapter.OnItemClickListener, UpcomingTaskAdapter.OnItemClickListener{
+public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapter.OnItemClickListener, UpcomingTaskAdapter.OnItemClickListener {
     private DatePickerDialog datePickerDialog;
-    private TimePickerDialog timePickerDialog;
     private Button btnPrevious;
     private Button btnNext;
     private Button btnMonthYear;
     private RecyclerView rcvCalendar;
     private RecyclerView rcvTask;
-    private List<Task> dayTask;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private List<Task> dayTask = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_upcoming, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        CalendarUtils.todayDateTime = LocalDateTime.now();
-        CalendarUtils.selectDate = LocalDateTime.now();
-        bindingView();
+        CalendarUtils.todayDateTime = LocalDate.now().atStartOfDay();
+        CalendarUtils.selectDate = LocalDate.now().atStartOfDay();
+        bindingView(view);
         bindingAction();
         init();
     }
@@ -78,43 +62,10 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
     private void init() {
         setWeekView();
         bindDatePicker();
-        bindTimePicker();
-        initTaskList(fullDays -> {
-            UpcomingTaskAdapter taskAdapter = new UpcomingTaskAdapter(fullDays, dayTask,this);
-            rcvTask.setAdapter(taskAdapter);
-        });
+        initTaskList();
     }
 
-//    private void initTaskList(TaskListCallback callback) {
-//        Log.d("debug fragment init task", "run");
-//        List<LocalDate> days = new ArrayList<>();
-//        LocalDate startDate = LocalDate.now();
-//        LocalDate endDateFirstMonth = startDate.plusMonths(1);
-//        LocalDate currentDate = startDate;
-//        Log.d("debug fragment init check 1", "run");
-//        while (!currentDate.isAfter(endDateFirstMonth)) {
-//            days.add(currentDate);
-//            Log.d("debug fragment init check 2", "c:"+currentDate+", end: "+endDateFirstMonth);
-//            dayTask = (getTasksInDate(currentDate));
-//            Log.d("debug fragment init check 2", dayTask.toString());
-//
-//            currentDate = currentDate.plusDays(1);
-//        }
-//
-//        UpcomingTaskAdapter taskAdapter = new UpcomingTaskAdapter(days, dayTask, this);
-//        rcvTask.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        rcvTask.setAdapter(taskAdapter);
-//        Log.d("debug fragment init check 4", "run");
-//
-//        loadRemainingDates(callback, days, endDateFirstMonth.plusDays(1));
-//    }
-
-    public interface TaskListCallback2 {
-        void onTaskListLoaded(List<Task> tasks);
-    }
-
-    private void initTaskList(TaskListCallback callback) {
-        Log.d("debug fragment init task", "run");
+    private void initTaskList() {
         List<LocalDate> days = new ArrayList<>();
         LocalDate startDate = LocalDate.now();
         LocalDate endDateFirstMonth = startDate.plusMonths(1);
@@ -122,160 +73,64 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
 
         while (!currentDate.isAfter(endDateFirstMonth)) {
             days.add(currentDate);
-            LocalDate finalCurrentDate = currentDate;
-            getTasksInDate(currentDate, tasks -> {
-                dayTask = tasks;
-                Log.d("debug fragment init check 2", finalCurrentDate + ", end: " + endDateFirstMonth);
-                Log.d("debug fragment init check 2", dayTask.toString());
-                if (finalCurrentDate.equals(endDateFirstMonth)) {
-                    UpcomingTaskAdapter taskAdapter = new UpcomingTaskAdapter(days, dayTask, this);
-                    rcvTask.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    rcvTask.setAdapter(taskAdapter);
-                    Log.d("debug fragment init check 4", "run");
-                    loadRemainingDates(callback, days, endDateFirstMonth.plusDays(1));
-                }
-            });
-
+            getTasksInDate(currentDate);
             currentDate = currentDate.plusDays(1);
         }
+
+        UpcomingTaskAdapter taskAdapter = new UpcomingTaskAdapter(days, dayTask, this);
+        rcvTask.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rcvTask.setAdapter(taskAdapter);
     }
 
-
-    private void getTasksInDate(LocalDate date, TaskListCallback2 callback) {
+    private void getTasksInDate(LocalDate date) {
         try {
-            String filter = String.format("userId eq %d and DueDate eq '%s'", 1, date);
             ApiService.getTaskApiEndpoint()
-                    .getFilterTasks(filter)
+                    .getTask()
                     .enqueue(new Callback<ListResponse<Task>>() {
                         @Override
                         public void onResponse(Call<ListResponse<Task>> call, Response<ListResponse<Task>> response) {
                             if (response.body() != null) {
-                                callback.onTaskListLoaded(response.body().getData());
+                                Log.d("debug fragment api ok", "api ok");
+                                dayTask.addAll(response.body().getData());
+                                rcvTask.getAdapter().notifyDataSetChanged(); // Notify adapter when data changes
                             } else {
-                                callback.onTaskListLoaded(new ArrayList<>());
+                                Log.d("debug fragment api ok", "response body is null");
                             }
                         }
 
                         @Override
                         public void onFailure(Call<ListResponse<Task>> call, Throwable t) {
-                            Log.d("debug fragment api fail", t.getMessage());
+                            Log.d("debug fragment api fail", t.getMessage() + " || " + call.request());
                         }
                     });
         } catch (Exception e) {
             Log.d("debug fragment api exception", e.getMessage());
-            Toast.makeText(getActivity(), "Invalid Id: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            callback.onTaskListLoaded(new ArrayList<>());
         }
     }
 
-    private void loadRemainingDates(TaskListCallback callback, List<LocalDate> initialDays, LocalDate startDate) {
-        new Thread(() -> {
-            List<LocalDate> fullDays = new ArrayList<>(initialDays);
-            LocalDate endDate = LocalDate.now().plusYears(1);
-            LocalDate currentDate = startDate;
-
-            while (!currentDate.isAfter(endDate)) {
-                fullDays.add(currentDate);
-                LocalDate finalCurrentDate = currentDate;
-                getTasksInDate(currentDate, tasks -> {
-                    dayTask = tasks;
-                    if (finalCurrentDate.equals(endDate)) {
-                        callback.onTaskListLoaded(fullDays);
-                    }
-                });
-                currentDate = currentDate.plusDays(1);
-            }
-        }).start();
-    }
-
-//    private List<Task> getTasksInDate(LocalDate date) {
-//        List<Task> tasks = new ArrayList<>();
-//        try {
-//            String filter = String.format("userId eq %d and DueDate eq '%s'", 1, date);
-//            ApiService.getTaskApiEndpoint()
-//                    .getFilterTasks(filter)
-//                    .enqueue(new Callback<ListResponse<Task>>() {
-//                        @Override
-//                        public void onResponse(Call<ListResponse<Task>> call, Response<ListResponse<Task>> response) {
-//                            Log.d("debug fragment api in", "api run");
-//                            dayTask = response.body().getData();
-//                            Log.d("debug fragment api size", "onResponse: "+dayTask.size());
-//                            Log.d("debug fragment api data", "onResponse: "+dayTask);
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<ListResponse<Task>> call, Throwable t) {
-//                            Log.d("debug fragment api fail", t.getMessage());
-//                            Toast.makeText(getActivity(), "Loi roi: "+t.getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//
-//        } catch (Exception e) {
-//            Log.d("debug fragment api exception", e.getMessage());
-//            Toast.makeText(getActivity(), "Invalid Id: "+e.getMessage() , Toast.LENGTH_SHORT).show();
-//        }
-//        Log.d("debug fragment api out", "api return");
-//        return tasks;
-//    }
-//
-//    private void loadRemainingDates(TaskListCallback callback, List<LocalDate> initialDays, LocalDate startDate) {
-//        new Thread(() -> {
-//            List<LocalDate> fullDays = new ArrayList<>(initialDays); // Start with the initial days
-//            LocalDate endDate = LocalDate.now().plusYears(1);
-//            LocalDate currentDate = startDate;
-//
-//            while (!currentDate.isAfter(endDate)) {
-//                fullDays.add(currentDate);
-//                dayTask = (getTasksInDate(currentDate));
-//                currentDate = currentDate.plusDays(1);
-//            }
-//            callback.onTaskListLoaded(fullDays);
-//        }).start();
-//    }
-
-    public interface TaskListCallback {
-        void onTaskListLoaded(List<LocalDate> days);
-    }
-
-    private void bindingView() {
-        btnPrevious = getView().findViewById(R.id.btnPrevious);
-        btnNext = getView().findViewById(R.id.btnNext);
-        btnMonthYear = getView().findViewById(R.id.btnMonthYear);
-        rcvCalendar = getView().findViewById(R.id.rcvCalendar);
-        rcvTask = getView().findViewById(R.id.rcvUpcomingTask);
+    private void bindingView(View view) {
+        btnPrevious = view.findViewById(R.id.btnPrevious);
+        btnNext = view.findViewById(R.id.btnNext);
+        btnMonthYear = view.findViewById(R.id.btnMonthYear);
+        rcvCalendar = view.findViewById(R.id.rcvCalendar);
+        rcvTask = view.findViewById(R.id.rcvUpcomingTask);
     }
 
     private void bindDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, day) -> {
-            CalendarUtils.selectDate = LocalDateTime.of(year,month,day,0,0,0);
+            CalendarUtils.selectDate = LocalDate.of(year, month + 1, day).atStartOfDay();
             setWeekView();
         };
 
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        datePickerDialog = new DatePickerDialog(getActivity(),
+        datePickerDialog = new DatePickerDialog(requireContext(),
                 android.R.style.Theme_Material_Light_Dialog,
-                dateSetListener, year, month, day);
-    }
-
-    private void bindTimePicker() {
-//        TimePickerDialog.OnTimeSetListener timeSetListener = (view, hour, minute) -> {
-//
-//        };
-//        timePickerDialog = new TimePickerDialog(getActivity(),
-//                android.R.style.Theme_Material_Light_Dialog,
-//                timeSetListener, CalendarUtils.selectDate.getHour(), CalendarUtils.selectDate.getMinute(),true);
+                dateSetListener, CalendarUtils.selectDate.getYear(), CalendarUtils.selectDate.getMonthValue() - 1, CalendarUtils.selectDate.getDayOfMonth());
     }
 
     private void setWeekView() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.US);
-        String date =  CalendarUtils.selectDate.format(formatter);
-        btnMonthYear.setText(date);
+        btnMonthYear.setText(CalendarUtils.selectDate.getMonth().toString() + " " + CalendarUtils.selectDate.getYear());
 
-        List<LocalDate> days = daysInWeekArray(CalendarUtils.selectDate);
+        List<LocalDate> days = CalendarUtils.daysInWeekArray(CalendarUtils.selectDate);
 
         UpcomingCalendarAdapter calendarAdapter = new UpcomingCalendarAdapter(days, this);
         rcvCalendar.setLayoutManager(new GridLayoutManager(getActivity(), 7));
@@ -289,13 +144,12 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
     }
 
     private void openDatePicker(View view) {
-        try{
+        try {
             datePickerDialog.show();
             datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.parseColor("#008374"));
             datePickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#008374"));
-
             datePickerDialog.getActionBar().hide();
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.d("opendaypicker", e.getMessage());
         }
     }
@@ -303,16 +157,19 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
     private void nextWeek(View view) {
         CalendarUtils.selectDate = CalendarUtils.selectDate.plusWeeks(1);
         setWeekView();
+        initTaskList();
     }
 
     private void prevWeek(View view) {
         CalendarUtils.selectDate = CalendarUtils.selectDate.minusWeeks(1);
         setWeekView();
+        initTaskList();
     }
 
     @Override
     public void onItemClick(LocalDate day, int position) {
-        CalendarUtils.selectDate = LocalDateTime.from(day.atStartOfDay());
+        CalendarUtils.selectDate = day.atStartOfDay();
         setWeekView();
+        initTaskList();
     }
 }

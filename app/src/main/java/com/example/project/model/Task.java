@@ -24,13 +24,13 @@ public class Task implements Serializable {
     private String description;
     @SerializedName("DueDate")
     @Expose
-    private LocalDateTime dueDate;
+    private Date dueDate;
     @SerializedName("CreatedAt")
     @Expose
-    private LocalDateTime createdAt;
+    private Date createdAt;
     @SerializedName("UpdatedAt")
     @Expose
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
     @SerializedName("Status")
     @Expose
     private int status;
@@ -38,7 +38,7 @@ public class Task implements Serializable {
     @Expose
     private int categoryId;
 
-    public Task(int taskId, int userId, String title, String description, LocalDateTime dueDate, LocalDateTime createdAt, LocalDateTime updatedAt, int status, int categoryId) {
+    public Task(int taskId, int userId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId) {
         this.taskId = taskId;
         this.userId = userId;
         this.title = title;
@@ -82,27 +82,27 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public LocalDateTime getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
