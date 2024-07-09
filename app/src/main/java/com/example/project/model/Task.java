@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,19 +24,31 @@ public class Task implements Serializable {
     private String description;
     @SerializedName("DueDate")
     @Expose
-    private Date dueDate;
+    private LocalDateTime dueDate;
     @SerializedName("CreatedAt")
     @Expose
-    private Date createdAt;
+    private LocalDateTime createdAt;
     @SerializedName("UpdatedAt")
     @Expose
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
     @SerializedName("Status")
     @Expose
     private int status;
     @SerializedName("CategoryId")
     @Expose
     private int categoryId;
+
+    public Task(int taskId, int userId, String title, String description, LocalDateTime dueDate, LocalDateTime createdAt, LocalDateTime updatedAt, int status, int categoryId) {
+        this.taskId = taskId;
+        this.userId = userId;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.status = status;
+        this.categoryId = categoryId;
+    }
 
     public int getTaskId() {
         return taskId;
@@ -69,27 +82,27 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public Date getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -106,19 +119,6 @@ public class Task implements Serializable {
     }
 
     public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-
-    public Task(int taskId, int userId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId) {
-        this.taskId = taskId;
-        this.userId = userId;
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.status = status;
         this.categoryId = categoryId;
     }
 }

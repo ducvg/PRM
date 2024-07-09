@@ -1,5 +1,6 @@
 package com.example.project.Service.ApiEndpoints;
 
+import com.example.project.model.ListResponse;
 import com.example.project.model.Task;
 
 import java.util.List;
@@ -15,24 +16,22 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface TaskApiEndpoint {
-    @GET("/task")
-    Call<List<Task>> getAllTask();
 
-    @GET("/comments/{id}")
+    @GET("task/{id}")
     Call<Task> getTaskById(@Path("id") int taskId);
 
-    @GET("/task?$filter=userId eq {userId}")
-    Call<List<Task>> getTaskByUserId(@Query("userId") int userId);
+    @GET("task")
+    Call<ListResponse<Task>> getFilterTasks(@Query("$filter") String filter);
 
-    @POST("/task")
+    @POST("task")
     Call<Task> createTask(@Body Task task);
 
-    @PUT("/task/{id}")
+    @PUT("task/{id}")
     Call<Task> updateTask(@Path("id") int taskId, @Body Task task);
 
-    @PATCH("/task/{id}")
+    @PATCH("task/{id}")
     Call<Task> patchTask(@Path("id") int taskId, @Body Task task);
 
-    @DELETE("/task/{id}")
+    @DELETE("task/{id}")
     Call<Void> deleteTask(@Path("id") int taskId);
 }

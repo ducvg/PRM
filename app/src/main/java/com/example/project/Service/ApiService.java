@@ -8,7 +8,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiService {
-    public static final String BASE_URL = "https://localhost:5001/api";
+    public static final String BASE_URL = "http://10.0.2.2:5001/api/";
     private TaskApiEndpoint taskApiEndpoint;
     private UserApiEndpoint userApiEndpoint;
     private CategoryApiEndpoint categoryApiEndpoint;

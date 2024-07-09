@@ -1,6 +1,7 @@
 package com.example.project.Service.ApiEndpoints;
 
 import com.example.project.model.Category;
+import com.example.project.model.ListResponse;
 
 import java.util.List;
 
@@ -15,13 +16,13 @@ import retrofit2.http.Path;
 
 public interface CategoryApiEndpoint {
         @GET("/Category")
-        Call<List<Category>> getAllTask();
+        Call<ListResponse<Category>> getAllTask();
 
         @GET("/Category/{id}")
         Call<Category> getCategoryById(@Path("id") int id);
 
         @GET("/Category?$filter=name eq '{name}'")
-        Call<List<Category>> getCategoryByName(@Path("name") String name);
+        Call<ListResponse<Category>> getCategoryByName(@Path("name") String name);
 
         @POST("/Category")
         Call<Category> createCategory(@Body Category user);

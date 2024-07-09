@@ -36,7 +36,6 @@ public class UpcomingCalendarAdapter extends RecyclerView.Adapter<UpcomingCalend
 
     @Override
     public void onBindViewHolder(@NonNull UpcomingCalendarViewHolder holder, int position) {
-        Log.d("debug adapter weekday",weekDay.toString());
         LocalDate date = weekDay.get(position);
         holder.setData(String.valueOf(date.getDayOfMonth()));
         if(date.equals(CalendarUtils.todayDateTime.toLocalDate())){

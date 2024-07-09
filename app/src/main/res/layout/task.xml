@@ -29,12 +29,6 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_marginLeft="5dp" />
-            <Button
-                android:id = "@+id/todoBtnEdit"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/baseline_edit_24"/>
         </LinearLayout>
         <TextView
             android:id = "@+id/todoDescription"
@@ -44,16 +38,31 @@
             android:textSize="15dp"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="5dp"/>
-        <TextView
-            android:id = "@+id/todoDateTime"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:layout_marginTop="5dp"
-            android:text="04/07/2024"
-            android:drawableStart="@drawable/baseline_event_available_24"
-            android:drawablePadding="8dp"
-            android:layout_marginLeft="50dp"/>
+            android:orientation="horizontal">
+            <TextView
+                android:id = "@+id/todoDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:layout_marginTop="5dp"
+                android:text="04/07/2024"
+                android:drawableStart="@drawable/baseline_event_available_24"
+                android:drawablePadding="8dp"
+                android:layout_marginLeft="50dp"/>
+            <TextView
+                android:id = "@+id/txtCategory"
+                android:gravity="end"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="15sp"
+                android:text="work"
+                android:layout_marginEnd="10dp"/>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
