@@ -1,13 +1,17 @@
 package com.example.project.Upcoming;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.R;
+import com.example.project.dal.SQLiteHelper;
+import com.example.project.model.Task;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +20,7 @@ public class UpcomingTaskViewHolder extends RecyclerView.ViewHolder implements V
     private List<LocalDate> days;
     private TextView txtTaskDate;
     private RecyclerView rcvTaskDate;
+    private SQLiteHelper db;
     private UpcomingTaskAdapter.OnItemClickListener listener;
 
     public UpcomingTaskViewHolder(@NonNull View itemView, List<LocalDate> days, UpcomingTaskAdapter.OnItemClickListener listener) {
@@ -36,10 +41,14 @@ public class UpcomingTaskViewHolder extends RecyclerView.ViewHolder implements V
         listener.onItemClick(days.get(getAdapterPosition()), getAdapterPosition());
     }
 
-    public void setData(LocalDate date){
+    public void setData(LocalDate date, List<Task> thisDayTask){
         String monthFullName = date.getMonth().toString();
         monthFullName = monthFullName.substring(0, 1).toUpperCase() + monthFullName.substring(1);
         txtTaskDate.setText(monthFullName+" "+date.getDayOfMonth()+" | "+date.getDayOfWeek());
+
+        UpcomingChildTaskAdapter childTaskAdapter = new UpcomingChildTaskAdapter(thisDayTask, listener);
+        rcvTaskDate.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
+        rcvTaskDate.setAdapter(childTaskAdapter);
     }
 
     public List<LocalDate> getDays() {

@@ -1,6 +1,7 @@
 package com.example.project.Upcoming;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.CalendarUtils;
 import com.example.project.R;
+import com.example.project.dal.SQLiteHelper;
 import com.example.project.fragment.FragmentUpcoming;
 import com.example.project.model.Task;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class UpcomingTaskAdapter extends RecyclerView.Adapter<UpcomingTaskViewHolder> {
     private List<LocalDate> yearDays;
-    private List<Task> dayTask;
     private OnItemClickListener listener;
+    private static SQLiteHelper db;
 
     public UpcomingTaskAdapter(List<LocalDate> yearDays, OnItemClickListener listener) {
         this.yearDays = yearDays;
@@ -33,14 +39,21 @@ public class UpcomingTaskAdapter extends RecyclerView.Adapter<UpcomingTaskViewHo
         View view = inflater.inflate(R.layout.fragment_upcoming_task, parent, false);
         ViewGroup.LayoutParams params = view.getLayoutParams();
         params.height = parent.getHeight();
+        db = new SQLiteHelper(parent.getContext());
         return new UpcomingTaskViewHolder(view, yearDays, listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull UpcomingTaskViewHolder holder, int position) {
         LocalDate date = yearDays.get(position);
-        holder.setData(date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
+        // Format the date
+        String formattedDate = date.format(formatter);
+        List<Task> thisDayTask = db.getByDateToday(formattedDate);
+        Log.d("debug taskholder 22",formattedDate);
+        Log.d("debug taskholder",thisDayTask.toString());
+        holder.setData(date, thisDayTask);
     }
 
     @Override

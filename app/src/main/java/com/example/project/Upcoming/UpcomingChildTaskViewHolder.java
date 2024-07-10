@@ -1,5 +1,6 @@
 package com.example.project.Upcoming;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -8,19 +9,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.R;
+import com.example.project.model.Task;
 
 public class UpcomingChildTaskViewHolder extends RecyclerView.ViewHolder{
     private CheckBox cbTodo;
+    private UpcomingTaskAdapter.OnItemClickListener listener;
     private TextView txtTitle, txtDescription, txtDueTime, txtCategory;
 
-    public UpcomingChildTaskViewHolder(@NonNull View itemView, CheckBox cbTodo, TextView txtTitle, TextView txtDescription, TextView txtDueTime, TextView txtCategory) {
+    public UpcomingChildTaskViewHolder(@NonNull View itemView, UpcomingTaskAdapter.OnItemClickListener listener) {
         super(itemView);
-        this.cbTodo = cbTodo;
-        this.txtTitle = txtTitle;
-        this.txtDescription = txtDescription;
-        this.txtDueTime = txtDueTime;
-        this.txtCategory = txtCategory;
+        this.listener = listener;
         bindingView();
+        bindingAction();
+    }
+
+    private void bindingAction() {
+        cbTodo.setOnClickListener(this::onCheckComplete);
+    }
+
+    private void onCheckComplete(View view) {
     }
 
     private void bindingView() {
@@ -31,43 +38,14 @@ public class UpcomingChildTaskViewHolder extends RecyclerView.ViewHolder{
         txtCategory = itemView.findViewById(R.id.txtCategory);
     }
 
-    public CheckBox getCbTodo() {
-        return cbTodo;
-    }
+    
 
-    public void setCbTodo(CheckBox cbTodo) {
-        this.cbTodo = cbTodo;
-    }
-
-    public TextView getTxtTitle() {
-        return txtTitle;
-    }
-
-    public void setTxtTitle(TextView txtTitle) {
-        this.txtTitle = txtTitle;
-    }
-
-    public TextView getTxtDescription() {
-        return txtDescription;
-    }
-
-    public void setTxtDescription(TextView txtDescription) {
-        this.txtDescription = txtDescription;
-    }
-
-    public TextView getTxtDueTime() {
-        return txtDueTime;
-    }
-
-    public void setTxtDueTime(TextView txtDueTime) {
-        this.txtDueTime = txtDueTime;
-    }
-
-    public TextView getTxtCategory() {
-        return txtCategory;
-    }
-
-    public void setTxtCategory(TextView txtCategory) {
-        this.txtCategory = txtCategory;
+    public void setData(Task task) {
+//        cbTodo.setChecked(true);
+        Log.d("debug children",task.toString());
+        txtTitle.setText(task.getTitle());
+        txtDescription.setText(task.getDescription());
+        txtDueTime.setText(task.getDueDate().toString());
+        txtCategory.setText(task.getCategoryId());
     }
 }

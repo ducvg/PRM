@@ -15,6 +15,7 @@ import com.example.project.model.Task;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,7 @@ import java.util.Locale;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Project.sqlite";
-    private static int DATABASE_VERSION = 7;
+    private static int DATABASE_VERSION = 10;
     public SQLiteHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -57,6 +58,79 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        seedTasks(db);
+    }
+
+    private void seedTasks(SQLiteDatabase db){
+        ContentValues values1 = new ContentValues();
+        values1.put("CategoryId", 1); // Giá trị của CategoryId
+        values1.put("CategoryName", "Work"); // Giá trị của CategoryName
+        db.insert("category", null, values1);
+
+        ContentValues values2 = new ContentValues();
+        values2.put("CategoryId", 2); // Giá trị của CategoryId
+        values2.put("CategoryName", "Study"); // Giá trị của CategoryName
+        db.insert("category", null, values2);
+
+        ContentValues values3 = new ContentValues();
+        values3.put("CategoryId", 3); // Giá trị của CategoryId
+        values3.put("CategoryName", "Personal"); // Giá trị của CategoryName
+        db.insert("category", null, values3);
+
+        ContentValues taskValues1 = new ContentValues();
+        taskValues1.put("TaskId", 1); // Giá trị của UserId
+        taskValues1.put("Title", "Finish project"); // Giá trị của Title
+        taskValues1.put("Description", "Complete all tasks by the deadline."); // Giá trị của Description
+        taskValues1.put("DueDate", "07-10-2024 10:54:12"); // Giá trị của DueDate (vd: "dd-MM-yyy HH:mm:ss")
+        taskValues1.put("Status", 0); // Giá trị của Status
+        taskValues1.put("CategoryId", 1); // Giá trị của CategoryId (tham chiếu đến bảng category)
+        db.insert("Task", null, taskValues1);
+
+        ContentValues taskValues2 = new ContentValues();
+        taskValues2.put("TaskId", 2);
+        taskValues2.put("Title", "Prepare presentation");
+        taskValues2.put("Description", "Create slides for the upcoming meeting.");
+        taskValues2.put("DueDate", "07-10-2024 09:00:00");
+        taskValues2.put("Status", 0);
+        taskValues2.put("CategoryId", 2);
+        db.insert("Task", null, taskValues2);
+
+        ContentValues taskValues3 = new ContentValues();
+        taskValues3.put("TaskId", 3);
+        taskValues3.put("Title", "Review budget");
+        taskValues3.put("Description", "Go over the budget report and identify discrepancies.");
+        taskValues3.put("DueDate", "07-10-2024 16:30:00");
+        taskValues3.put("Status", 1);
+        taskValues3.put("CategoryId", 3);
+        db.insert("Task", null, taskValues3);
+
+        ContentValues taskValues4 = new ContentValues();
+        taskValues4.put("TaskId", 4);
+        taskValues4.put("Title", "Team meeting");
+        taskValues4.put("Description", "Discuss project progress and next steps with the team.");
+        taskValues4.put("DueDate", "07-11-2024 14:00:00");
+        taskValues4.put("Status", 0);
+        taskValues4.put("CategoryId", 1);
+        db.insert("Task", null, taskValues4);
+
+        ContentValues taskValues5 = new ContentValues();
+        taskValues5.put("TaskId", 5);
+        taskValues5.put("Title", "Write report");
+        taskValues5.put("Description", "Draft the final report for the completed project.");
+        taskValues5.put("DueDate", "07-13-2024 18:00:00");
+        taskValues5.put("Status", 0);
+        taskValues5.put("CategoryId", 4);
+        db.insert("Task", null, taskValues5);
+
+        ContentValues taskValues6 = new ContentValues();
+        taskValues6.put("TaskId", 6);
+        taskValues6.put("Title", "Code review");
+        taskValues6.put("Description", "Review code submissions and provide feedback.");
+        taskValues6.put("DueDate", "07-13-2024 12:00:00");
+        taskValues6.put("Status", 1);
+        taskValues6.put("CategoryId", 2);
+        db.insert("Task", null, taskValues6);
+
 
     }
 
