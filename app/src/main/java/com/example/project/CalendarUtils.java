@@ -11,11 +11,12 @@ import java.util.List;
 public class CalendarUtils{
     public static LocalDateTime todayDateTime;
     public static LocalDateTime selectDate;
+    public static List<String> categories;
 
     public static List<LocalDate> daysInWeekArray(LocalDateTime date)
     {
         List<LocalDate> days = new ArrayList<>();
-        LocalDate current = sundayForDate(date.toLocalDate());
+        LocalDate current = MonForDate(date.toLocalDate());
         Log.d("debug util",current.toString());
         LocalDate endDate = current.plusWeeks(1);
 
@@ -29,7 +30,7 @@ public class CalendarUtils{
         return days;
     }
 
-    private static LocalDate sundayForDate(LocalDate current)
+    private static LocalDate MonForDate(LocalDate current)
     {
         LocalDate oneWeekAgo = current.minusWeeks(1);
 

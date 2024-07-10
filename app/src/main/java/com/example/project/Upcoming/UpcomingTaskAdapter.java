@@ -1,5 +1,6 @@
 package com.example.project.Upcoming;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project.CalendarUtils;
 import com.example.project.R;
 import com.example.project.fragment.FragmentUpcoming;
 import com.example.project.model.Task;
@@ -19,9 +21,8 @@ public class UpcomingTaskAdapter extends RecyclerView.Adapter<UpcomingTaskViewHo
     private List<Task> dayTask;
     private OnItemClickListener listener;
 
-    public UpcomingTaskAdapter(List<LocalDate> yearDays, List<Task> dayTask, OnItemClickListener listener) {
+    public UpcomingTaskAdapter(List<LocalDate> yearDays, OnItemClickListener listener) {
         this.yearDays = yearDays;
-        this.dayTask = dayTask;
         this.listener = listener;
     }
 
@@ -37,6 +38,8 @@ public class UpcomingTaskAdapter extends RecyclerView.Adapter<UpcomingTaskViewHo
 
     @Override
     public void onBindViewHolder(@NonNull UpcomingTaskViewHolder holder, int position) {
+        LocalDate date = yearDays.get(position);
+        holder.setData(date);
 
     }
 

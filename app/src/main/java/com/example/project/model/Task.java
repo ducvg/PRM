@@ -9,7 +9,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Task implements Serializable {
+public class Task {
+
     @SerializedName("TaskId")
     @Expose
     private int taskId;
@@ -24,31 +25,19 @@ public class Task implements Serializable {
     private String description;
     @SerializedName("DueDate")
     @Expose
-    private LocalDateTime dueDate;
+    private String dueDate;
     @SerializedName("CreatedAt")
     @Expose
-    private LocalDateTime createdAt;
+    private String createdAt;
     @SerializedName("UpdatedAt")
     @Expose
-    private LocalDateTime updatedAt;
+    private String updatedAt;
     @SerializedName("Status")
     @Expose
     private int status;
     @SerializedName("CategoryId")
     @Expose
     private int categoryId;
-
-    public Task(int taskId, int userId, String title, String description, LocalDateTime dueDate, LocalDateTime createdAt, LocalDateTime updatedAt, int status, int categoryId) {
-        this.taskId = taskId;
-        this.userId = userId;
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.status = status;
-        this.categoryId = categoryId;
-    }
 
     public int getTaskId() {
         return taskId;
@@ -82,27 +71,27 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public LocalDateTime getDueDate() {
+    public String getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -120,5 +109,20 @@ public class Task implements Serializable {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId=" + taskId +
+                ", userId=" + userId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", dueDate=" + dueDate +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", status=" + status +
+                ", categoryId=" + categoryId +
+                '}';
     }
 }

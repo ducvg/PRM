@@ -15,7 +15,9 @@ import com.example.project.R;
 import com.example.project.model.Task;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,11 +54,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Task task = list.get(position);
         holder.title.setText(task.getTitle());
         holder.desc.setText(task.getDescription());
-        LocalDateTime duedate = task.getDueDate();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String dateString = dateFormat.format(duedate);
-        holder.date.setText(dateString);
 
+        String duedate = task.getDueDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        // Convert String to LocalDate
+        LocalDate date = LocalDate.parse(duedate, formatter);
+
+        // Format LocalDate back to String (if necessary)
+        String dateString = date.format(formatter);
+
+        holder.date.setText(dateString);
     }
 
     @Override

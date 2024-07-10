@@ -36,6 +36,12 @@ public class UpcomingTaskViewHolder extends RecyclerView.ViewHolder implements V
         listener.onItemClick(days.get(getAdapterPosition()), getAdapterPosition());
     }
 
+    public void setData(LocalDate date){
+        String monthFullName = date.getMonth().toString();
+        monthFullName = monthFullName.substring(0, 1).toUpperCase() + monthFullName.substring(1);
+        txtTaskDate.setText(monthFullName+" "+date.getDayOfMonth()+" | "+date.getDayOfWeek());
+    }
+
     public List<LocalDate> getDays() {
         return days;
     }
