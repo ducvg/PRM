@@ -1,18 +1,16 @@
 package com.example.project.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.util.HashSet;
 import java.util.Set;
 
 public class Category {
-    @SerializedName("CategoryId")
-    @Expose
     private int categoryId;
-    @SerializedName("CategoryId")
-    @Expose
     private String name;
+
+    public Category(int categoryId, String name) {
+        this.categoryId = categoryId;
+        this.name = name;
+    }
 
     public int getCategoryId() {
         return categoryId;
@@ -27,11 +25,6 @@ public class Category {
     }
 
     public void setName(String name) {
-        this.name = name;
-    }
-
-    public Category(int categoryId, String name) {
-        this.categoryId = categoryId;
         this.name = name;
     }
 }

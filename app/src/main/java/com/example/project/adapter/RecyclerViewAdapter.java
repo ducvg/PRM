@@ -1,5 +1,6 @@
 package com.example.project.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,7 @@ import com.example.project.R;
 import com.example.project.model.Task;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,17 +53,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Task task = list.get(position);
         holder.title.setText(task.getTitle());
         holder.desc.setText(task.getDescription());
-
-        String duedate = task.getDueDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        // Convert String to LocalDate
-        LocalDate date = LocalDate.parse(duedate, formatter);
-
-        // Format LocalDate back to String (if necessary)
-        String dateString = date.format(formatter);
-
+        Date duedate = task.getDueDate();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = dateFormat.format(duedate);
         holder.date.setText(dateString);
+
+        try{
+
+            holder.category.setText(task.getCategoryId());
+        }catch (Exception e){
+            Log.d("hello", e.getMessage());
+        }
+
+
     }
 
     @Override
@@ -73,13 +74,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class TodayViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private TextView title,desc,date,category;
+        private TextView title,desc,date,category,todaydate;
         private CheckBox cbIsCheck;
 
         private void bindingView() {
             title = itemView.findViewById(R.id.todoTitle);
             desc = itemView.findViewById(R.id.todoDescription);
             date = itemView.findViewById(R.id.todoDateTime);
+            todaydate =itemView.findViewById(R.id.tvTodayDate);
             category = itemView.findViewById(R.id.todoCategory);
             cbIsCheck = itemView.findViewById(R.id.todoCheckBox);
             itemView.setOnClickListener(this);

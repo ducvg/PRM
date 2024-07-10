@@ -3,6 +3,7 @@ package com.example.project.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -23,21 +24,41 @@ public class Task {
     @SerializedName("Description")
     @Expose
     private String description;
-    @SerializedName("DueDate")
-    @Expose
-    private String dueDate;
-    @SerializedName("CreatedAt")
-    @Expose
-    private String createdAt;
-    @SerializedName("UpdatedAt")
-    @Expose
-    private String updatedAt;
-    @SerializedName("Status")
-    @Expose
+
+    private Date dueDate;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     private int status;
-    @SerializedName("CategoryId")
-    @Expose
+
     private int categoryId;
+
+    public Task() {
+    }
+
+    public Task(int taskId, String title, String description, Date dueDate, int status, int categoryId) {
+        this.taskId = taskId;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.status = status;
+        this.categoryId = categoryId;
+    }
+
+
+    public Task(int taskId, int userId, String title, String description, Date dueDate, LocalDateTime createdAt, LocalDateTime updatedAt, int status, int categoryId) {
+        this.taskId = taskId;
+        this.userId = userId;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.status = status;
+        this.categoryId = categoryId;
+    }
 
     public int getTaskId() {
         return taskId;
@@ -71,27 +92,27 @@ public class Task {
         this.description = description;
     }
 
-    public String getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -109,20 +130,5 @@ public class Task {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "taskId=" + taskId +
-                ", userId=" + userId +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", dueDate=" + dueDate +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", status=" + status +
-                ", categoryId=" + categoryId +
-                '}';
     }
 }
