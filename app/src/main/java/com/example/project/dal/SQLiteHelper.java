@@ -141,11 +141,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public List<Task> getByDateToday(String date) {
         List<Task> listtasks = new ArrayList<>();
-
         // Chuẩn bị câu truy vấn
         String whereClause = "SUBSTR(DueDate, 1, 10) like ?";
         String[] whereArgs = {date};
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 "Task",         // Tên bảng
@@ -156,7 +154,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 null,           // HAVING
                 null            // ORDER BY
         );
-
         // Duyệt qua kết quả truy vấn và thêm vào danh sách
         while (cursor != null && cursor.moveToNext()) {
             int taskid = cursor.getInt(0);
@@ -179,7 +176,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             Task task = new Task(taskid, title, description, dueDate, status, categoryId);
             listtasks.add(task);
         }
-
         // Đóng Cursor sau khi sử dụng
         cursor.close();
 

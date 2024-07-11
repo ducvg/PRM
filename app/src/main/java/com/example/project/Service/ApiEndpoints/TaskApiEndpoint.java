@@ -4,17 +4,12 @@ import com.example.project.model.Category;
 import com.example.project.model.ListResponse;
 import com.example.project.model.Subtask;
 import com.example.project.model.Task;
-import com.example.project.model.TestObj;
 import com.example.project.model.User;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -25,9 +20,6 @@ public interface TaskApiEndpoint {
 
     @GET("task/{id}")
     Call<Task> getTaskById(@Path("id") int taskId);
-
-    @GET("1")
-    Call<TestObj> calltest();
     
     @GET("task")
     Call<ListResponse<Task>> getTask();

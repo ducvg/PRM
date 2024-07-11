@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.CalendarUtils;
@@ -25,7 +26,7 @@ import java.util.Locale;
 public class UpcomingTaskAdapter extends RecyclerView.Adapter<UpcomingTaskViewHolder> {
     private List<LocalDate> yearDays;
     private OnItemClickListener listener;
-    private static SQLiteHelper db;
+    private SQLiteHelper db;
 
     public UpcomingTaskAdapter(List<LocalDate> yearDays, OnItemClickListener listener) {
         this.yearDays = yearDays;
@@ -37,19 +38,16 @@ public class UpcomingTaskAdapter extends RecyclerView.Adapter<UpcomingTaskViewHo
     public UpcomingTaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.fragment_upcoming_task, parent, false);
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        params.height = parent.getHeight();
-        db = new SQLiteHelper(parent.getContext());
-        return new UpcomingTaskViewHolder(view, yearDays, listener);
+
+        return new UpcomingTaskViewHolder(view, yearDays);
     }
 
     @Override
     public void onBindViewHolder(@NonNull UpcomingTaskViewHolder holder, int position) {
         LocalDate date = yearDays.get(position);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-        // Format the date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         String formattedDate = date.format(formatter);
+        db = new SQLiteHelper(holder.itemView.getContext());
         List<Task> thisDayTask = db.getByDateToday(formattedDate);
         Log.d("debug taskholder 22",formattedDate);
         Log.d("debug taskholder",thisDayTask.toString());

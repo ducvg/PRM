@@ -15,6 +15,14 @@ public class ListResponse<T> {
     @Expose
     private List<T> data;
 
+    public ListResponse() {
+    }
+
+    public ListResponse(String odata, List<T> data) {
+        this.odata = odata;
+        this.data = data;
+    }
+
     public List<T> getData() {
         return data;
     }

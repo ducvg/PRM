@@ -1,5 +1,8 @@
 package com.example.project.Service;
+import com.example.project.Service.ApiEndpoints.CategoryApiEndpoint;
+import com.example.project.Service.ApiEndpoints.SubtaskApiEndpoint;
 import com.example.project.Service.ApiEndpoints.TaskApiEndpoint;
+import com.example.project.Service.ApiEndpoints.UserApiEndpoint;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -7,6 +10,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiService {
     public static final String BASE_URL = "http://10.0.2.2:8080/api/";
     private TaskApiEndpoint taskApiEndpoint;
+    private UserApiEndpoint userApiEndpoint;
+    private SubtaskApiEndpoint subtaskApiEndpoint;
+    private CategoryApiEndpoint categoryApiEndpoint;
+
 
     private static ApiService apiServices;
 
@@ -24,9 +31,21 @@ public class ApiService {
                 .build();
 
         taskApiEndpoint = retrofit.create(TaskApiEndpoint.class);
+        userApiEndpoint = retrofit.create(UserApiEndpoint.class);
+        subtaskApiEndpoint = retrofit.create(SubtaskApiEndpoint.class);
+        categoryApiEndpoint = retrofit.create(CategoryApiEndpoint.class);
     }
 
     public static TaskApiEndpoint getTaskApiEndpoint() {
         return getInstance().taskApiEndpoint;
+    }
+    public static UserApiEndpoint getUserApiEndpoint() {
+        return getInstance().userApiEndpoint;
+    }
+    public static SubtaskApiEndpoint getSubtaskApiEndpoint() {
+        return getInstance().subtaskApiEndpoint;
+    }
+    public static CategoryApiEndpoint getCategoryApiEndpoint() {
+        return getInstance().categoryApiEndpoint;
     }
 }

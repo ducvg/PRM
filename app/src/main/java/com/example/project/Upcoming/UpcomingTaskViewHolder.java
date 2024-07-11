@@ -1,9 +1,13 @@
 package com.example.project.Upcoming;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,39 +20,76 @@ import com.example.project.model.Task;
 import java.time.LocalDate;
 import java.util.List;
 
-public class UpcomingTaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class UpcomingTaskViewHolder extends RecyclerView.ViewHolder  {
     private List<LocalDate> days;
     private TextView txtTaskDate;
-    private RecyclerView rcvTaskDate;
-    private SQLiteHelper db;
-    private UpcomingTaskAdapter.OnItemClickListener listener;
+    private LinearLayout lnlTaskList;
 
-    public UpcomingTaskViewHolder(@NonNull View itemView, List<LocalDate> days, UpcomingTaskAdapter.OnItemClickListener listener) {
+    //item
+    private TextView txtTitle;
+    private CheckBox cbTodo;
+    private TextView txtDescription;
+    private TextView txtDue;
+    private TextView txtCategory;
+    //item
+
+    public UpcomingTaskViewHolder(@NonNull View itemView, List<LocalDate> days) {
         super(itemView);
         this.days = days;
-        this.listener = listener;
-        itemView.setOnClickListener(this);
         bindingView();
     }
 
     private void bindingView() {
         txtTaskDate = itemView.findViewById(R.id.txtTaskDate);
-        rcvTaskDate = itemView.findViewById(R.id.rcvTaskDate);
+        lnlTaskList = itemView.findViewById(R.id.lnlTaskList);
     }
 
-    @Override
-    public void onClick(View v) {
-        listener.onItemClick(days.get(getAdapterPosition()), getAdapterPosition());
+    private void bindingItemView(View view){
+        txtTitle = view.findViewById(R.id.todoTitle);
+        cbTodo = view.findViewById(R.id.todoCheckBox);
+        txtDescription = view.findViewById(R.id.todoDescription);
+        txtDue = view.findViewById(R.id.todoDateTime);
+        txtCategory = view.findViewById(R.id.todoCategory);
+    }
+
+    private void bindingItemAction() {
+        cbTodo.setOnCheckedChangeListener(this::checkStatus);
+    }
+
+    private void checkStatus(CompoundButton compoundButton, boolean b) {
+        Toast.makeText(itemView.getContext(),"item check", Toast.LENGTH_SHORT);
     }
 
     public void setData(LocalDate date, List<Task> thisDayTask){
         String monthFullName = date.getMonth().toString();
         monthFullName = monthFullName.substring(0, 1).toUpperCase() + monthFullName.substring(1);
-        txtTaskDate.setText(monthFullName+" "+date.getDayOfMonth()+" | "+date.getDayOfWeek());
+        txtTaskDate.setText(monthFullName+" "+date.getDayOfMonth()+" "+date.getYear()+" | "+date.getDayOfWeek());
 
-        UpcomingChildTaskAdapter childTaskAdapter = new UpcomingChildTaskAdapter(thisDayTask, listener);
-        rcvTaskDate.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
-        rcvTaskDate.setAdapter(childTaskAdapter);
+        LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
+        lnlTaskList.removeAllViews();
+        for(Task t : thisDayTask){
+            View view = inflater.inflate(R.layout.task, lnlTaskList, false);
+            bindingItemView(view);
+            bindingItemAction();
+
+            txtTitle.setText(t.getTitle());
+            txtDescription.setText(t.getDescription());
+            txtDue.setText(t.getDueDate().toString());
+            txtCategory.setText(String.valueOf(t.getCategoryId()));
+            lnlTaskList.addView(view);
+        }
+
+
+    }
+
+
+
+    public LinearLayout getLnlTaskList() {
+        return lnlTaskList;
+    }
+
+    public void setLnlTaskList(LinearLayout lnlTaskList) {
+        this.lnlTaskList = lnlTaskList;
     }
 
     public List<LocalDate> getDays() {
@@ -67,20 +108,5 @@ public class UpcomingTaskViewHolder extends RecyclerView.ViewHolder implements V
         this.txtTaskDate = txtTaskDate;
     }
 
-    public RecyclerView getRcvTaskDate() {
-        return rcvTaskDate;
-    }
-
-    public void setRcvTaskDate(RecyclerView rcvTaskDate) {
-        this.rcvTaskDate = rcvTaskDate;
-    }
-
-    public UpcomingTaskAdapter.OnItemClickListener getListener() {
-        return listener;
-    }
-
-    public void setListener(UpcomingTaskAdapter.OnItemClickListener listener) {
-        this.listener = listener;
-    }
 }
 

@@ -49,6 +49,9 @@ public class Attachment {
         this.task = task;
     }
 
+    public Attachment() {
+    }
+
     public Attachment(int attachmentId, int taskId, String filePath, Date uploadedAt, Task task) {
         this.attachmentId = attachmentId;
         this.taskId = taskId;

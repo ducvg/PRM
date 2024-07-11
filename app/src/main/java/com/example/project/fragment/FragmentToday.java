@@ -48,6 +48,8 @@ public class FragmentToday extends Fragment implements RecyclerViewAdapter.TaskL
         db = new SQLiteHelper(getContext());
         SimpleDateFormat dayFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
         String todayDateStr = dayFormat.format(new Date());
+        Log.d("FragmentToday", "Number of tasks todaystr: " +todayDateStr);
+
         tvTodayDate.setText(todayDateStr);
         List<Task> list = db.getByDateToday(todayDateStr);
         List<Task> listOverDue = db.getOverDue();

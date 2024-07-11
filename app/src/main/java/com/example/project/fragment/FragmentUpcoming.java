@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,12 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.CalendarUtils;
 import com.example.project.R;
-import com.example.project.Service.ApiService;
 import com.example.project.Upcoming.UpcomingCalendarAdapter;
 import com.example.project.Upcoming.UpcomingTaskAdapter;
-import com.example.project.model.ListResponse;
-import com.example.project.model.Task;
-import com.example.project.model.TestObj;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,10 +34,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapter.OnItemClickListener, UpcomingTaskAdapter.OnItemClickListener {
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
@@ -50,8 +42,8 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
     private Button btnMonthYear;
     private RecyclerView rcvCalendar;
     private RecyclerView rcvTask;
-    private LinearLayoutManager linearLayoutManager;
-    private List<Task> dayTask;
+    private LinearLayout lnlTaskList;
+    private UpcomingTaskAdapter taskAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,29 +85,29 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
             days.add(currentDate);
             currentDate = currentDate.plusDays(1);
         }
-
-        UpcomingTaskAdapter taskAdapter = new UpcomingTaskAdapter(days, this);
+        taskAdapter = new UpcomingTaskAdapter(days, this);
         rcvTask.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvTask.setAdapter(taskAdapter);
+        taskAdapter.notifyDataSetChanged();
+        loadRemainingDates(days, currentDate);
     }
 
-    private void loadRemainingDates(TaskListCallback callback, List<LocalDate> initialDays, LocalDate startDate) {
+    private void loadRemainingDates(List<LocalDate> initialDays, LocalDate startDate) {
         new Thread(() -> {
-            List<LocalDate> fullDays = new ArrayList<>(initialDays);
-            Log.d("debug fragment fullyear", String.valueOf(fullDays.size())+" | init:"+ initialDays.size());
             LocalDate endDate = LocalDate.now().plusYears(1);
             LocalDate currentDate = startDate;
 
             while (!currentDate.isAfter(endDate)) {
-                fullDays.add(currentDate);
+                Log.d("debug thread", currentDate.toString());
+                initialDays.add(currentDate);
                 currentDate = currentDate.plusDays(1);
+                updateTaskList(initialDays);
             }
-            callback.onTaskListLoaded(fullDays);
         }).start();
     }
 
-    public interface TaskListCallback {
-        void onTaskListLoaded(List<LocalDate> days);
+    public void updateTaskList(List<LocalDate> days) {
+        taskAdapter.notifyItemInserted(days.size() - 1);
     }
 
     private void bindingView() {
