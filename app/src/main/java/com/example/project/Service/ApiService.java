@@ -1,14 +1,24 @@
 package com.example.project.Service;
+import androidx.annotation.NonNull;
+
+import com.example.project.AppConfig;
 import com.example.project.Service.ApiEndpoints.CategoryApiEndpoint;
 import com.example.project.Service.ApiEndpoints.SubtaskApiEndpoint;
 import com.example.project.Service.ApiEndpoints.TaskApiEndpoint;
 import com.example.project.Service.ApiEndpoints.UserApiEndpoint;
 
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiService {
-    public static final String BASE_URL = "http://10.0.2.2:8080/api/";
+    public static final String BASE_URL = "http://192.168.1.14:5100/api/";
+
     private TaskApiEndpoint taskApiEndpoint;
     private UserApiEndpoint userApiEndpoint;
     private SubtaskApiEndpoint subtaskApiEndpoint;
@@ -26,8 +36,22 @@ public class ApiService {
 
     private ApiService() {
 
+        Interceptor interceptor = new Interceptor() {
+            @NonNull
+            @Override
+            public Response intercept(@NonNull Chain chain) throws IOException {
+                Request request = chain.request();
+                Request.Builder builder = request.newBuilder();
+                builder.addHeader("Authorization", "Bearer "+ AppConfig.token);
+                return chain.proceed(builder.build());
+            }
+        };
+
+        OkHttpClient.Builder okBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
+
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(okBuilder.build())
                 .build();
 
         taskApiEndpoint = retrofit.create(TaskApiEndpoint.class);

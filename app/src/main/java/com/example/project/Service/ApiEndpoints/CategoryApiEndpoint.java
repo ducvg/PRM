@@ -1,9 +1,7 @@
 package com.example.project.Service.ApiEndpoints;
 
 import com.example.project.model.Category;
-import com.example.project.model.ListResponse;
-
-import java.util.List;
+import com.example.project.model.ServiceModel.ListResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

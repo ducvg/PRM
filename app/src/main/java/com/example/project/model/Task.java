@@ -39,6 +39,28 @@ public class Task {
     @SerializedName("CategoryId")
     @Expose
     private int categoryId;
+    private boolean isLocal;  //SQLite type integer
+
+    public boolean isLocal() {
+        return isLocal;
+    }
+
+    public void setLocal(boolean local) {
+        isLocal = local;
+    }
+
+    public Task(int taskId, int userId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId, boolean isLocal) {
+        this.taskId = taskId;
+        this.userId = userId;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.status = status;
+        this.categoryId = categoryId;
+        this.isLocal = isLocal;
+    }
 
     public Task() {
     }
@@ -63,6 +85,21 @@ public class Task {
         this.updatedAt = updatedAt;
         this.status = status;
         this.categoryId = categoryId;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId=" + taskId +
+                ", userId=" + userId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", dueDate=" + dueDate +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", status=" + status +
+                ", categoryId=" + categoryId +
+                '}';
     }
 
     public int getTaskId() {

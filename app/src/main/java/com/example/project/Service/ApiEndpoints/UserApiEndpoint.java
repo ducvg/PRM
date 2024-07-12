@@ -1,9 +1,9 @@
 package com.example.project.Service.ApiEndpoints;
 
-import com.example.project.model.ListResponse;
+import com.example.project.model.ServiceModel.ListResponse;
+import com.example.project.model.ServiceModel.LoginDTO;
+import com.example.project.model.ServiceModel.TokenDTO;
 import com.example.project.model.User;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -21,6 +21,10 @@ public interface UserApiEndpoint {
     @GET("User/{id}")
     Call<User> getUserById(@Path("id") int id);
 
+    ///api/Auth/Login
+    @POST("Auth/Login")
+    Call<TokenDTO> login(@Body LoginDTO user);
+
     @POST("User")
     Call<User> register(@Body User user);
 
@@ -32,4 +36,5 @@ public interface UserApiEndpoint {
 
     @DELETE("User/{id}")
     Call<Void> deleteUser(@Path("id") int id);
+
 }

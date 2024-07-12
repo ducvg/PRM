@@ -32,24 +32,29 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(@NonNull SQLiteDatabase db) {
         String sqlCreateCategoryTable = "CREATE TABLE category (" +
-                "    CategoryId INTEGER PRIMARY KEY," +
+                "    CategoryId INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "    CategoryName TEXT" +
                 ");";
         db.execSQL(sqlCreateCategoryTable);
 
 
         String sqlCreateTaskTable = "CREATE TABLE Task (" +
-                "    TaskId INTEGER PRIMARY KEY," +
+                "    TaskId INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "    Title TEXT," +
                 "    Description TEXT," +
                 "    DueDate TEXT," +
                 "    Status INTEGER," +
+                "    IsLocal INTEGER, " +
                 "    CategoryId INTEGER," +
                 "    FOREIGN KEY (CategoryId) REFERENCES category(CategoryId)" +
                 ");";
         db.execSQL(sqlCreateTaskTable);
 
-
+        String createLocalChangeTable = "CREATE TABLE LocalChanges (" +
+                "    TaskId INTEGER," +
+                "    Operation INTEGER" +
+                ");";
+        db.execSQL(createLocalChangeTable);
 
 
 
@@ -130,8 +135,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         taskValues6.put("Status", 1);
         taskValues6.put("CategoryId", 2);
         db.insert("Task", null, taskValues6);
-
-
     }
 
     @Override

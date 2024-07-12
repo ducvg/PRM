@@ -57,7 +57,7 @@ public class UpcomingTaskViewHolder extends RecyclerView.ViewHolder  {
     }
 
     private void checkStatus(CompoundButton compoundButton, boolean b) {
-        Toast.makeText(itemView.getContext(),"item check", Toast.LENGTH_SHORT);
+        Toast.makeText(itemView.getContext(),"item check", Toast.LENGTH_SHORT).show();
     }
 
     public void setData(LocalDate date, List<Task> thisDayTask){

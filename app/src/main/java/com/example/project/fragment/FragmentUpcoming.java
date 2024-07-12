@@ -23,8 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.CalendarUtils;
 import com.example.project.R;
+import com.example.project.Service.ApiService;
 import com.example.project.Upcoming.UpcomingCalendarAdapter;
 import com.example.project.Upcoming.UpcomingTaskAdapter;
+import com.example.project.model.ServiceModel.ListResponse;
+import com.example.project.model.Task;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,6 +36,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapter.OnItemClickListener, UpcomingTaskAdapter.OnItemClickListener {
     private DatePickerDialog datePickerDialog;
@@ -74,8 +81,29 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
         initTaskList();
     }
 
+    private void fetchDateTask(LocalDate date) {
+        try {
+            String filter = String.format("$userId eq %d and DueDate eq '%s'", 1, date);
+            ApiService.getTaskApiEndpoint()
+                    .getFilterTasks(filter)
+                    .enqueue(new Callback<ListResponse<Task>>() {
+                        @Override
+                        public void onResponse(Call<ListResponse<Task>> call, Response<ListResponse<Task>> response) {
+                            Log.d("debug fragment api ok", "api ok");
+                            Log.d("debug fragment api ok", response.body().toString());
+                        }
+
+                        @Override
+                        public void onFailure(Call<ListResponse<Task>> call, Throwable t) {
+                            Log.d("debug fragment api fail", t.getMessage() + " || " + call.request());
+                        }
+                    });
+        } catch (Exception e) {
+            Log.d("debug fragment api exception", e.getMessage());
+        }
+    }
+
     private void initTaskList() {
-        Log.d("debug fragment init task", "run");
         List<LocalDate> days = new ArrayList<>();
         LocalDate startDate = LocalDate.now();
         LocalDate endDateFirstMonth = startDate.plusMonths(1);
@@ -88,7 +116,6 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
         taskAdapter = new UpcomingTaskAdapter(days, this);
         rcvTask.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvTask.setAdapter(taskAdapter);
-        taskAdapter.notifyDataSetChanged();
         loadRemainingDates(days, currentDate);
     }
 
@@ -98,7 +125,6 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
             LocalDate currentDate = startDate;
 
             while (!currentDate.isAfter(endDate)) {
-                Log.d("debug thread", currentDate.toString());
                 initialDays.add(currentDate);
                 currentDate = currentDate.plusDays(1);
                 updateTaskList(initialDays);

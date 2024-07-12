@@ -49,8 +49,6 @@ public class UpcomingTaskAdapter extends RecyclerView.Adapter<UpcomingTaskViewHo
         String formattedDate = date.format(formatter);
         db = new SQLiteHelper(holder.itemView.getContext());
         List<Task> thisDayTask = db.getByDateToday(formattedDate);
-        Log.d("debug taskholder 22",formattedDate);
-        Log.d("debug taskholder",thisDayTask.toString());
         holder.setData(date, thisDayTask);
     }
 
