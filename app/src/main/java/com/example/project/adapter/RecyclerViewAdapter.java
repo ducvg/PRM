@@ -57,14 +57,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dateString = dateFormat.format(duedate);
         holder.date.setText(dateString);
+        holder.category.setText(String.valueOf(task.getCategoryId()));
 
-        try{
+        holder.cbIsCheck.setChecked(task.getStatus() == 1);
 
-            holder.category.setText(task.getCategoryId());
-        }catch (Exception e){
-            Log.d("hello", e.getMessage());
-        }
-
+        // Handle checkbox state change
+        holder.cbIsCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            task.setStatus(isChecked ? 1 : 0);
+            if (taskListenr != null) {
+                taskListenr.onTaskStatusChange(task, isChecked);
+            }
+        });
 
     }
 
@@ -103,5 +106,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
     public interface TaskListenr{
         void onTaskClick(View view, int position);
+        void onTaskStatusChange(Task task, boolean isChecked);
     }
 }

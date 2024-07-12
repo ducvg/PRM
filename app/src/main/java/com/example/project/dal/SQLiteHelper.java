@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Project.sqlite";
-    private static int DATABASE_VERSION = 10;
+    private static int DATABASE_VERSION = 12;
     public SQLiteHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -57,6 +57,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(createLocalChangeTable);
 
 
+
+        ContentValues taskValues7 = new ContentValues();
+        taskValues7.put("TaskId", 7);
+        taskValues7.put("Title", "Code review");
+        taskValues7.put("Description", "Review code submissions and provide feedback.");
+        taskValues7.put("DueDate", "07-12-2024 12:00:00");
+        taskValues7.put("Status", 1);
+        taskValues7.put("CategoryId", 2);
+        db.insert("Task", null, taskValues7);
 
 
     }

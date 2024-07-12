@@ -6,49 +6,57 @@
 
     >
     <LinearLayout
+
         android:orientation="vertical"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp">
+        android:layout_height="150sp">
+
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
+            android:fontFamily="@font/andika"
+            android:background="@drawable/img_1"
             android:text="Today"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="45dp"
-            android:textStyle="bold"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"/>
+            android:textStyle="bold" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/andika"
             android:text="Overdue"
             android:textColor="@color/black"
-            android:textSize="25dp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="@android:color/darker_gray"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleViewOverDue"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:layout_height="300dp" />
     <TextView
         android:id="@+id/tvTodayDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Today"
         android:textColor="@color/black"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"
+        android:fontFamily="@font/andika"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="@android:color/darker_gray"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleViewToday"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:layout_height="wrap_content"/>
 </LinearLayout>

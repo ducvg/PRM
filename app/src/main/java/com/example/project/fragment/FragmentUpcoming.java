@@ -92,7 +92,6 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
                             Log.d("debug fragment api ok", "api ok");
                             Log.d("debug fragment api ok", response.body().toString());
                         }
-
                         @Override
                         public void onFailure(Call<ListResponse<Task>> call, Throwable t) {
                             Log.d("debug fragment api fail", t.getMessage() + " || " + call.request());

@@ -48,8 +48,6 @@ public class FragmentToday extends Fragment implements RecyclerViewAdapter.TaskL
         db = new SQLiteHelper(getContext());
         SimpleDateFormat dayFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
         String todayDateStr = dayFormat.format(new Date());
-        Log.d("FragmentToday", "Number of tasks todaystr: " +todayDateStr);
-
         tvTodayDate.setText(todayDateStr);
         List<Task> list = db.getByDateToday(todayDateStr);
         List<Task> listOverDue = db.getOverDue();
@@ -57,7 +55,6 @@ public class FragmentToday extends Fragment implements RecyclerViewAdapter.TaskL
         Log.d("FragmentToday", "Number of tasks retrieved: " + listOverDue.size());
         adapter.setList(list);
         adapterOverdue.setList(listOverDue);
-
         LinearLayoutManager manager1 = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         LinearLayoutManager manager2 = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         recyclerViewToday.setLayoutManager(manager1);
@@ -69,6 +66,11 @@ public class FragmentToday extends Fragment implements RecyclerViewAdapter.TaskL
 
     @Override
     public void onTaskClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onTaskStatusChange(Task task, boolean isChecked) {
 
     }
 }
