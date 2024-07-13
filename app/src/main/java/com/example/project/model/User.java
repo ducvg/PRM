@@ -3,11 +3,12 @@ package com.example.project.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class User {
+public class User implements Serializable {
     @SerializedName("UserId")
     @Expose
     private int userId;

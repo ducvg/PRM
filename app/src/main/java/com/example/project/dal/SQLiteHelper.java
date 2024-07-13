@@ -25,7 +25,7 @@ import java.util.Locale;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Project.sqlite";
-    private static int DATABASE_VERSION = 10;
+    private static int DATABASE_VERSION = 12;
     public SQLiteHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -59,6 +59,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         seedTasks(db);
 
+
+        ContentValues taskValues7 = new ContentValues();
+        taskValues7.put("TaskId", 7);
+        taskValues7.put("Title", "Code review");
+        taskValues7.put("Description", "Review code submissions and provide feedback.");
+        taskValues7.put("DueDate", "07-12-2024 12:00:00");
+        taskValues7.put("Status", 1);
+        taskValues7.put("CategoryId", 2);
+        db.insert("Task", null, taskValues7);
 
 
     }
@@ -335,8 +344,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         return taskList;
     }
-    public void addTask(Task task) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public long addTask(Task task) {
+
         ContentValues values = new ContentValues();
         values.put("TaskId", task.getUserId());
         values.put("Title", task.getTitle());
@@ -346,9 +355,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put("DueDate", dueDateString);
         values.put("Status", task.getStatus());
         values.put("CategoryId", task.getCategoryId());
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.insert("Task", null, values);
 
-        db.insert("Task", null, values);
-        db.close();
     }
     public void addCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();

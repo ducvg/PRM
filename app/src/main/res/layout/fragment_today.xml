@@ -6,20 +6,35 @@
 
     >
     <LinearLayout
+
         android:orientation="vertical"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp">
+        android:layout_height="150sp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:fontFamily="@font/andika"
+            android:background="@drawable/img_1"
+            android:text="Today"
+            android:paddingLeft="5dp"
+            android:textColor="@color/white"
+            android:textSize="45dp"
+            android:textStyle="bold" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Today"
+            android:fontFamily="@font/andika"
+            android:text="Overdue"
             android:textColor="@color/black"
-            android:textSize="45dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="5dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="@android:color/darker_gray"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

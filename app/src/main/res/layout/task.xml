@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="3dp"
     app:cardCornerRadius="5dp"
     android:background="@color/gray">
     <LinearLayout
@@ -27,28 +26,31 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="HALO HALO HALO halo "
+                android:fontFamily="casual"
+                android:maxLines="1"
+                android:text="Do Home Work "
                 android:textColor="@color/black"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:maxLines="1"/>
+                android:textSize="20sp" />
         </LinearLayout>
+
         <TextView
-            android:id = "@+id/todoDescription"
+            android:id="@+id/todoDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="HALO HALO HALO halo "
-            android:textSize="20dp"
             android:layout_marginLeft="55dp"
-            android:layout_marginTop="5dp"
-            android:maxLines="1"/>
+
+            android:fontFamily="monospace"
+            android:maxLines="1"
+            android:text="We must doing home work now"
+            android:textSize="16sp"
+            android:textStyle="italic" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginLeft="55dp"
             android:layout_marginTop="5dp"
-            android:textSize="25dp">
+            android:textSize="15sp">
 
             <TextView
                 android:id = "@+id/todoDateTime"
@@ -77,6 +79,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1.5dp"
+            android:layout_marginLeft="55dp"
             android:background="@android:color/darker_gray"/>
 
     </LinearLayout>

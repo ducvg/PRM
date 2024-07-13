@@ -2,37 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:orientation="vertical"
-    android:layout_marginLeft="10dp"
+
     >
     <LinearLayout
         android:orientation="vertical"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginTop="60dp"
+        android:layout_height="wrap_content"
         >
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80sp"
         android:text="Search"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:fontFamily="@font/andika"
+        android:background="@drawable/img_1"
         android:textSize="45dp"
         android:textStyle="bold"
-        android:layout_marginTop="5dp"
+        android:paddingLeft="5dp"
       />
 
     <EditText
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:hint="Search Tasks, Projects, and More"
+        android:hint="Search Tasks, Category, and More"
         android:inputType="text"
         android:layout_marginTop="10dp"
         android:drawableStart="@drawable/baseline_search_24"
         android:drawablePadding="8dp"
        />
+
+        <Spinner
+            android:id="@+id/spnCategory"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"/>
+
 
     </LinearLayout>
 

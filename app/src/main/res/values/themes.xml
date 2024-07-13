@@ -3,7 +3,7 @@
     <style name="Base.Theme.Project" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">@color/purple</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.Project" parent="Base.Theme.Project" />

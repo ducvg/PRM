@@ -62,8 +62,10 @@ public class UpcomingTaskViewHolder extends RecyclerView.ViewHolder  {
 
     public void setData(LocalDate date, List<Task> thisDayTask){
         String monthFullName = date.getMonth().toString();
-        monthFullName = monthFullName.substring(0, 1).toUpperCase() + monthFullName.substring(1);
-        txtTaskDate.setText(monthFullName+" "+date.getDayOfMonth()+" "+date.getYear()+" | "+date.getDayOfWeek());
+        monthFullName = monthFullName.substring(0, 1).toUpperCase() + monthFullName.substring(1).toLowerCase();
+        String dayofweek = date.getDayOfWeek().toString();
+        dayofweek = dayofweek.substring(0, 1).toUpperCase() + dayofweek.substring(1).toLowerCase();
+        txtTaskDate.setText(monthFullName+" "+date.getDayOfMonth()+" "+date.getYear()+" | "+dayofweek);
 
         LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
         lnlTaskList.removeAllViews();
