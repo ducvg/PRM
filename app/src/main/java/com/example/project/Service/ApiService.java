@@ -1,7 +1,7 @@
 package com.example.project.Service;
 import androidx.annotation.NonNull;
 
-import com.example.project.AppConfig;
+import com.example.project.main.AppConfig;
 import com.example.project.Service.ApiEndpoints.CategoryApiEndpoint;
 import com.example.project.Service.ApiEndpoints.SubtaskApiEndpoint;
 import com.example.project.Service.ApiEndpoints.TaskApiEndpoint;

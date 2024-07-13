@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.project.main;
 
 public class AppConfig {
     public static String token = "";

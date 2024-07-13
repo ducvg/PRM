@@ -1,6 +1,6 @@
 package com.example.project.fragment;
 
-import static com.example.project.CalendarUtils.daysInWeekArray;
+import static com.example.project.main.CalendarUtils.daysInWeekArray;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -21,11 +21,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project.CalendarUtils;
+import com.example.project.main.CalendarUtils;
 import com.example.project.R;
 import com.example.project.Service.ApiService;
-import com.example.project.Upcoming.UpcomingCalendarAdapter;
-import com.example.project.Upcoming.UpcomingTaskAdapter;
+import com.example.project.fragment.Upcoming.UpcomingCalendarAdapter;
+import com.example.project.fragment.Upcoming.UpcomingTaskAdapter;
 import com.example.project.model.ServiceModel.ListResponse;
 import com.example.project.model.Task;
 

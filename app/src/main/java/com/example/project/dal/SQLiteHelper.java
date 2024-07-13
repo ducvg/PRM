@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -56,6 +57,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 ");";
         db.execSQL(createLocalChangeTable);
 
+        seedTasks(db);
 
 
 
@@ -63,7 +65,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        seedTasks(db);
     }
 
     private void seedTasks(SQLiteDatabase db){
@@ -232,6 +233,60 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         return listtasks;
     }
+
+    public List<Task> getUpcomingTask() {
+        List<Task> listtasks = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 1); // Add one day to get tomorrow's date
+        String tomorrowDateStr = dateFormat.format(calendar.getTime());
+
+        // Chuẩn bị câu truy vấn
+        String whereClause = "SUBSTR(DueDate, 1, 10) = ?";
+        String[] whereArgs = {tomorrowDateStr};
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                "Task",         // Tên bảng
+                null,           // Các cột cần lấy
+                whereClause,    // Điều kiện WHERE
+                whereArgs,      // Giá trị thay thế cho điều kiện WHERE
+                null,           // GROUP BY
+                null,           // HAVING
+                null            // ORDER BY
+        );
+
+        // Duyệt qua kết quả truy vấn và thêm vào danh sách
+        while (cursor != null && cursor.moveToNext()) {
+            int taskid = cursor.getInt(0);
+            String title = cursor.getString(1);
+            String description = cursor.getString(2);
+            String dueDateStr = cursor.getString(3);
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.US);
+            Date dueDate = null;
+            try {
+                dueDate = formatter.parse(dueDateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            int status = cursor.getInt(4);
+            int categoryId = cursor.getInt(5);
+
+            // Tạo đối tượng Task và thêm vào danh sách
+            Task task = new Task(taskid, title, description, dueDate, status, categoryId);
+            listtasks.add(task);
+        }
+
+        // Đóng Cursor sau khi sử dụng
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return listtasks;
+    }
+
 
     public List<Task> getAllTasks() {
         List<Task> taskList = new ArrayList<>();
