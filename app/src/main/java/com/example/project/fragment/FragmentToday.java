@@ -1,12 +1,9 @@
 package com.example.project.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.R;
 import com.example.project.fragment.Today.TodayTaskAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 
-public class FragmentToday extends Fragment{
+public class FragmentToday extends Fragment {
     private TodayTaskAdapter taskAdapter;
     private RecyclerView rcvRecentDay;
 
@@ -60,15 +58,18 @@ public class FragmentToday extends Fragment{
 //
 //    }
 //
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        SimpleDateFormat dayFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
-//        String todayDateStr = dayFormat.format(new Date());
-//        tvTodayDate.setText(todayDateStr);
-//        List<Task> list = db.getByDateToday(todayDateStr);
-//        List<Task> listOverDue = db.getOverDue();
-//        adapter.setList(list);
-//        adapterOverdue.setList(listOverDue);
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        List<String> days = new ArrayList<>();
+        days.add("Overdue");days.add("Today");days.add("Upcoming");
+        taskAdapter = new TodayTaskAdapter(days);
+        rcvRecentDay.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rcvRecentDay.setAdapter(taskAdapter);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+    }
 }

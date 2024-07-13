@@ -4,20 +4,17 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,9 +28,7 @@ import com.example.project.model.Task;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -51,6 +46,10 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
     private SQLiteHelper db;;
     private Button btnCancel,btnUpdate;
     private AlertDialog alertDialog;
+    private DatePickerDialog datePickerDialog;
+    private static LocalDateTime selectDate;
+    private TimePickerDialog timePickerDialog;
+
 
 
     public TodayTaskViewHolder(@NonNull View itemView, List<String> days) {
@@ -108,6 +107,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
 
     private void bindingItemAction () {
             cbTodo.setOnCheckedChangeListener(this::checkStatus);
+
         }
 
     private void showEditDialog(Task task) {
@@ -117,31 +117,35 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
         View popupView = inflater.inflate(R.layout.activity_update_edit, null);
 
         // Khởi tạo các view từ popupView
-        EditText etTitle = popupView.findViewById(R.id.edtitle);
-        EditText etDescription = popupView.findViewById(R.id.edtAddDescription);
-        Spinner spnCategory = popupView.findViewById(R.id.spnCategory);
-        TextView txtDueDate = popupView.findViewById(R.id.txtDueDate);
-        TextView txtDueTime = popupView.findViewById(R.id.txtDueTime);
+        etTaskTitle = popupView.findViewById(R.id.edtitle);
+        etTaskDescription = popupView.findViewById(R.id.edtAddDescription);
+        spnTaskCategory = popupView.findViewById(R.id.spnCategory);
+        txtTaskDueDate = popupView.findViewById(R.id.txtDueDate);
+        txtTaskDueTime = popupView.findViewById(R.id.txtDueTime);
+
+
+        txtTaskDueDate.setOnClickListener(this::openDatePicker);
+        txtTaskDueTime.setOnClickListener(this::openTimePicker);
 
         // Lấy danh sách Category từ SQLiteHelper
         List<Category> categoryList = db.getAllCategory();
 
         // Tạo Adapter cho Spinner
         CategoryAdapter adapter = new CategoryAdapter(itemView.getContext(), categoryList);
-        spnCategory.setAdapter(adapter);
+        spnTaskCategory.setAdapter(adapter);
 
         // Đặt giá trị từ task vào các view
-        etTitle.setText(task.getTitle());
-        etDescription.setText(task.getDescription());
-        spnCategory.setSelection(task.getCategoryId());
+        etTaskTitle.setText(task.getTitle());
+        etTaskDescription.setText(task.getDescription());
+        spnTaskCategory.setSelection(task.getCategoryId());
         Date dueDate = task.getDueDate();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
         String formattedDueDate = dateFormat.format(dueDate);
-        txtDueDate.setText(formattedDueDate);
+        txtTaskDueDate.setText(formattedDueDate);
         try{
             SimpleDateFormat TimeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
             String formattedDueDate2 = TimeFormat.format(dueDate);
-            txtDueTime.setText(formattedDueDate2); // Tương tự với thời gian
+            txtTaskDueTime.setText(formattedDueDate2); // Tương tự với thời gian
         }catch (Exception e){
             Log.d("erorrrrrrr",e.getMessage());
         }
@@ -152,11 +156,11 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int updatedCategoryId = ((Category) spnCategory.getSelectedItem()).getCategoryId();
+                int updatedCategoryId = ((Category) spnTaskCategory.getSelectedItem()).getCategoryId();
 
                 // Lấy lại giá trị ngày giờ từ TextViews txtDueDate và txtDueTime
-                String dueDateString = txtDueDate.getText().toString();
-                String dueTimeString = txtDueTime.getText().toString();
+                String dueDateString = txtTaskDueDate.getText().toString();
+                String dueTimeString = txtTaskDueTime.getText().toString();
                 String fullDueDateTimeString = dueDateString + " " + dueTimeString;
 
                 // Chuyển đổi định dạng ngày giờ sang Date object
@@ -168,15 +172,13 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
                     e.printStackTrace();
                 }
 
-                task.setTitle(etTitle.getText().toString());
-                task.setDescription(etDescription.getText().toString());
+                task.setTitle(etTaskTitle.getText().toString());
+                task.setDescription(etTaskDescription.getText().toString());
                 task.setDueDate(updatedDueDate);
                 task.setCategoryId(updatedCategoryId);
                 db.updateTask(task);
                 Log.d("day la task update", "category id = " + updatedCategoryId);
-                // Hiển thị thông báo cập nhật thành công hoặc thất bại
                 Toast.makeText(itemView.getContext(), "Đã cập nhật công việc", Toast.LENGTH_SHORT).show();
-                // Làm mới giao diện người dùng hoặc thực hiện các hành động cần thiết khác sau khi cập nhật
                 alertDialog.dismiss();
             }
         });
@@ -195,6 +197,29 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
         builder.setView(popupView);
         alertDialog = builder.create();
         alertDialog.show();
+
+    }
+
+    private void openTimePicker(View view) {
+        try {
+            timePickerDialog.show();
+            timePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.parseColor("#008374"));
+            timePickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#008374"));
+            timePickerDialog.getActionBar().hide();
+        } catch (Exception e) {
+            Log.d("opendaypicker", e.getMessage());
+        }
+    }
+
+    private void openDatePicker(View view) {
+        try {
+            datePickerDialog.show();
+            datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.parseColor("#008374"));
+            datePickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#008374"));
+            datePickerDialog.getActionBar().hide();
+        } catch (Exception e) {
+            Log.d("opendaypicker", e.getMessage());
+        }
     }
 
 

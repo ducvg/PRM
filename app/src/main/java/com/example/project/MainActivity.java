@@ -35,12 +35,18 @@ import com.example.project.adapter.CategoryAdapter;
 import com.example.project.adapter.ViewPagerAdapter;
 import com.example.project.dal.SQLiteHelper;
 import com.example.project.model.Category;
+import com.example.project.model.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.time.LocalDate;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private BottomNavigationView navigationView;
@@ -48,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private FloatingActionButton fab;
     private PopupWindow createWindow;
     private ViewGroup container;
-    private LayoutInflater popupÌnlater;
+    private LayoutInflater popupInflater;
     private RelativeLayout mainLayout;
     private TextView txtDueDate, txtDueTime;
     private EditText edtTitle, edtDescription;
@@ -147,8 +153,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void bindPopupWindow() {
-        popupÌnlater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        container = (ViewGroup) popupÌnlater.inflate(R.layout.activity_create_popup, null);
+        popupInflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        container = (ViewGroup) popupInflater.inflate(R.layout.activity_create_popup, null);
         createWindow = new PopupWindow(container, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         createWindow.setOutsideTouchable(true);
         createWindow.setTouchable(true);
@@ -166,7 +172,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void addTask(View view) {
+        String title = edtTitle.getText().toString().trim();
+        String description = edtDescription.getText().toString().trim();
+        int categoryId = ((Category) spnCategory.getSelectedItem()).getCategoryId();
+        Date dueDate = null;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.getDefault());
+            String fullDueDateTimeString = txtDueDate.getText().toString() + " " + txtDueTime.getText().toString();
+            dueDate = dateFormat.parse(fullDueDateTimeString);
+            Task newTask = new Task(title, description, dueDate, categoryId);
+            Log.e("Day la task moi duoc them", " task title:  " + title + " des: " + description + " duedate: " + dueDate + " categoryid: " + categoryId);
+            long result = db.addTask(newTask);
+            if (result != -1) {
+                Toast.makeText(this, "Đã thêm công việc mới", Toast.LENGTH_SHORT).show();
+                createWindow.dismiss();
+            } else {
+                Toast.makeText(this, "Thêm công việc thất bại", Toast.LENGTH_SHORT).show();
+            }
 
+        } catch (ParseException e) {
+            Log.e("Add Task Error", "Error parsing due date: " + e.getMessage());
+            Toast.makeText(this, "Đã xảy ra lỗi khi chuyển đổi ngày giờ hạn", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e("Add Task Error", "Error adding task: " + e.getMessage());
+            Toast.makeText(this, "Đã xảy ra lỗi khi thêm công việc", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openCreateWindow(View view) {

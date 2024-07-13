@@ -87,6 +87,13 @@ public class Task implements Serializable {
         this.categoryId = categoryId;
     }
 
+    public Task(String title, String description, Date dueDate, int categoryId) {
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.categoryId = categoryId;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
