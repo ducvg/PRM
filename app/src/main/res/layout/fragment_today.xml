@@ -17,6 +17,7 @@
             android:fontFamily="@font/andika"
             android:background="@drawable/img_1"
             android:text="Today"
+            android:paddingLeft="5dp"
             android:textColor="@color/white"
             android:textSize="45dp"
             android:textStyle="bold" />

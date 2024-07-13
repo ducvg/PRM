@@ -289,8 +289,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         return taskList;
     }
-    public void addTask(Task task) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public long addTask(Task task) {
+
         ContentValues values = new ContentValues();
         values.put("TaskId", task.getUserId());
         values.put("Title", task.getTitle());
@@ -300,9 +300,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put("DueDate", dueDateString);
         values.put("Status", task.getStatus());
         values.put("CategoryId", task.getCategoryId());
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.insert("Task", null, values);
 
-        db.insert("Task", null, values);
-        db.close();
     }
     public void addCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();

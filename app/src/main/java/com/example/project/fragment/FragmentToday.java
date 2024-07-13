@@ -1,5 +1,6 @@
 package com.example.project.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.R;
+import com.example.project.UpdateEditActivity;
 import com.example.project.adapter.RecyclerViewAdapter;
 import com.example.project.dal.SQLiteHelper;
 import com.example.project.model.Category;
@@ -66,11 +68,26 @@ public class FragmentToday extends Fragment implements RecyclerViewAdapter.TaskL
 
     @Override
     public void onTaskClick(View view, int position) {
-
+        Task task = adapter.getTask(position);
+        Intent intent = new Intent(getActivity(), UpdateEditActivity.class);
+        intent.putExtra("task",task);
+        startActivity(intent);
     }
 
     @Override
     public void onTaskStatusChange(Task task, boolean isChecked) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SimpleDateFormat dayFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+        String todayDateStr = dayFormat.format(new Date());
+        tvTodayDate.setText(todayDateStr);
+        List<Task> list = db.getByDateToday(todayDateStr);
+        List<Task> listOverDue = db.getOverDue();
+        adapter.setList(list);
+        adapterOverdue.setList(listOverDue);
     }
 }
