@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.R;
 import com.example.project.dal.SQLiteHelper;
+import com.example.project.fragment.Upcoming.UpcomingTaskAdapter;
 import com.example.project.model.Task;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.util.List;
 public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskViewHolder> {
     private List<String> recentDate;
     private SQLiteHelper db;
+
 
 
     public TodayTaskAdapter(List<String> recentDate) {

@@ -21,16 +21,6 @@
             android:textColor="@color/white"
             android:textSize="45dp"
             android:textStyle="bold" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/andika"
-            android:text="Overdue"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1.5dp"

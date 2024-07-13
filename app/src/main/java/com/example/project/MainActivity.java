@@ -31,6 +31,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.project.adapter.CategoryAdapter;
 import com.example.project.adapter.ViewPagerAdapter;
 import com.example.project.dal.SQLiteHelper;
 import com.example.project.model.Category;
@@ -129,18 +130,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spnCategory = container.findViewById(R.id.spnCategory);
         btnCreate = container.findViewById(R.id.btnCreate);
         btnCancel = container.findViewById(R.id.btnCancel);
-        try{
-            loadSpinnerData();
-        }catch (Exception e){
-            Log.d("hellloo",e.getMessage());
-        }
+        loadSpinnerData();
+
     }
 
     private void loadSpinnerData() {
-        List<Category> categories = db.getAllCategories();
-        ArrayAdapter<Category> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnCategory.setAdapter(adapter);
+        try{
+            db = new SQLiteHelper(this);
+            List<Category> categories = db.getAllCategory();
+            CategoryAdapter adapter = new CategoryAdapter(this,categories);
+            spnCategory.setAdapter(adapter);
+        }catch (Exception e){
+            Log.d("Error Load Spinner Popup Add", e.getMessage());
+        }
+
     }
 
     private void bindPopupWindow() {

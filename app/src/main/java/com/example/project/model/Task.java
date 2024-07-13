@@ -39,17 +39,17 @@ public class Task implements Serializable {
     @SerializedName("CategoryId")
     @Expose
     private int categoryId;
-    private boolean isLocal;  //SQLite type integer
+    private int isLocal;  //SQLite type integer
 
-    public boolean isLocal() {
+    public int isLocal() {
         return isLocal;
     }
 
-    public void setLocal(boolean local) {
+    public void setLocal(int local) {
         isLocal = local;
     }
 
-    public Task(int taskId, int userId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId, boolean isLocal) {
+    public Task(int taskId, int userId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId, int isLocal) {
         this.taskId = taskId;
         this.userId = userId;
         this.title = title;
