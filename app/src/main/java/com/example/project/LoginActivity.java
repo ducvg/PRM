@@ -11,12 +11,9 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.project.Service.ApiService;
-import com.example.project.model.ServiceModel.ListResponse;
+import com.example.project.main.AppConfig;
 import com.example.project.model.ServiceModel.LoginDTO;
 import com.example.project.model.ServiceModel.TokenDTO;
-import com.example.project.model.Task;
-
-import java.time.LocalDate;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -1,7 +1,6 @@
-package com.example.project.Upcoming;
+package com.example.project.fragment.Upcoming;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project.CalendarUtils;
+import com.example.project.main.CalendarUtils;
 import com.example.project.R;
 
 import java.time.LocalDate;

@@ -1,6 +1,5 @@
-package com.example.project.Upcoming;
+package com.example.project.fragment.Upcoming;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 

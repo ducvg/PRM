@@ -1,4 +1,4 @@
-package com.example.project.Upcoming;
+package com.example.project.fragment.Upcoming;
 
 import android.util.Log;
 import android.view.LayoutInflater;

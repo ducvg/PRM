@@ -36,28 +36,10 @@
             android:layout_height="1.5dp"
             android:background="@android:color/darker_gray"/>
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleViewOverDue"
-        android:layout_width="match_parent"
-        android:layout_height="300dp" />
-    <TextView
-        android:id="@+id/tvTodayDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Today"
-        android:textColor="@color/black"
-        android:fontFamily="@font/andika"
-        android:textSize="20sp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:background="@android:color/darker_gray"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleViewToday"
+        android:id="@+id/rcvRecentDay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp" />
 </LinearLayout>
