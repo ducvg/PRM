@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
@@ -30,13 +32,16 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.project.adapter.ViewPagerAdapter;
+import com.example.project.dal.SQLiteHelper;
+import com.example.project.model.Category;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private BottomNavigationView navigationView;
     private ViewPager viewPager;
     private FloatingActionButton fab;
@@ -51,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private static LocalDateTime selectDate;
     private TimePickerDialog timePickerDialog;
+    private int selectedCategoryId;
+    private SQLiteHelper db;
+
 
     private void bindDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, day) -> {
@@ -121,6 +129,18 @@ public class MainActivity extends AppCompatActivity {
         spnCategory = container.findViewById(R.id.spnCategory);
         btnCreate = container.findViewById(R.id.btnCreate);
         btnCancel = container.findViewById(R.id.btnCancel);
+        try{
+            loadSpinnerData();
+        }catch (Exception e){
+            Log.d("hellloo",e.getMessage());
+        }
+    }
+
+    private void loadSpinnerData() {
+        List<Category> categories = db.getAllCategories();
+        ArrayAdapter<Category> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnCategory.setAdapter(adapter);
     }
 
     private void bindPopupWindow() {
@@ -138,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
         txtDueTime.setOnClickListener(this::openTimePicker);
         btnCancel.setOnClickListener(v -> createWindow.dismiss());
         btnCreate.setOnClickListener(this::addTask);
+
+
     }
 
     private void addTask(View view) {
@@ -211,6 +233,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void seedData() {
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 }
