@@ -58,15 +58,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
 
 
-        ContentValues taskValues7 = new ContentValues();
-        taskValues7.put("TaskId", 7);
-        taskValues7.put("Title", "Code review");
-        taskValues7.put("Description", "Review code submissions and provide feedback.");
-        taskValues7.put("DueDate", "07-12-2024 12:00:00");
-        taskValues7.put("Status", 1);
-        taskValues7.put("CategoryId", 2);
-        db.insert("Task", null, taskValues7);
-
 
     }
 
@@ -333,6 +324,24 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("Task", null, null);
         db.close();
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT CategoryId, CategoryName FROM category";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String name = cursor.getString(1);
+                categories.add(new Category(id, name));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return categories;
     }
 
 }
