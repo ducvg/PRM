@@ -213,4 +213,9 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
         CalendarUtils.selectDate = LocalDateTime.from(day.atStartOfDay());
         setWeekView();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

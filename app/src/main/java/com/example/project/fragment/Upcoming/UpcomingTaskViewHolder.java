@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.R;
+import com.example.project.dal.SQLiteHelper;
 import com.example.project.model.Task;
 
 import java.time.LocalDate;
@@ -74,7 +75,9 @@ public class UpcomingTaskViewHolder extends RecyclerView.ViewHolder  {
             txtTitle.setText(t.getTitle());
             txtDescription.setText(t.getDescription());
             txtDue.setText(t.getDueDate().toString());
-            txtCategory.setText(String.valueOf(t.getCategoryId()));
+            SQLiteHelper db = new SQLiteHelper(itemView.getContext());
+            String categoryName = db.getCategoryNameById(t.getCategoryId());
+            txtCategory.setText(categoryName);
             lnlTaskList.addView(view);
         }
 

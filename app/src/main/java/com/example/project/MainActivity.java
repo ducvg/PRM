@@ -171,25 +171,35 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void addTask(View view) {
         String title = edtTitle.getText().toString().trim();
         String description = edtDescription.getText().toString().trim();
-        int categoryId = ((Category) spnCategory.getSelectedItem()).getCategoryId();
+        String Duedate = txtDueDate.getText().toString().trim();
+        String DueTime = txtDueTime.getText().toString().trim();
+        int categoryId;
+
+        // Kiểm tra xem Spinner có phần tử nào không
+        if (spnCategory.getSelectedItem() == null) {
+            Toast.makeText(this, "Danh mục không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            categoryId = ((Category) spnCategory.getSelectedItem()).getCategoryId();
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String fullDueDateTimeString =  Duedate + " " + DueTime;
         Date dueDate = null;
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm");
-            String fullDueDateTimeString = txtDueDate.getText().toString().trim() + " " + txtDueTime.getText().toString().trim();
-            dueDate = dateFormat.parse(fullDueDateTimeString.trim());
-            Task newTask = new Task(title, description, dueDate, categoryId);
-            Log.e("Day la task moi duoc them", " task title:  " + title + " des: " + description + " day la txtduedate: "  + dueDate + "  " +  " categoryid: " + categoryId);
-            long result = db.addTask(newTask);
-            if (result != -1) {
-                Toast.makeText(this, "Đã thêm công việc mới", Toast.LENGTH_SHORT).show();
-                createWindow.dismiss();
-            } else {
-                Toast.makeText(this, "Thêm công việc thất bại", Toast.LENGTH_SHORT).show();
-            }
-
+            // Phân tích chuỗi ngày giờ
+             dueDate = dateFormat.parse(fullDueDateTimeString);
         } catch (ParseException e) {
-            Log.e("Add Task Error", "Error parsing due date: " + e.getMessage());
-            Toast.makeText(this, "Đã xảy ra lỗi khi chuyển đổi ngày giờ hạn", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ngày giờ không hợp lệ", Toast.LENGTH_SHORT).show();
+            Log.e("Parse Error", "Error parsing date: " + e.getMessage());
+            return;
+        }
+
+        try {
+            Task newTask = new Task(title, description, dueDate, categoryId);
+            Log.e("Task dyi", "Task title: " + title + " Description: " + description + " Due Date: " + dueDate + " Category ID: " + categoryId);
+            long result = db.addTask(newTask);
+
         } catch (Exception e) {
             Log.e("Add Task Error", "Error adding task: " + e.getMessage());
             Toast.makeText(this, "Đã xảy ra lỗi khi thêm công việc", Toast.LENGTH_SHORT).show();

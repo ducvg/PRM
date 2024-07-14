@@ -129,7 +129,8 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
             txtTitle.setText(t.getTitle());
             txtDescription.setText(t.getDescription());
             txtDue.setText(t.getDueDate().toString());
-            txtCategory.setText(String.valueOf(t.getCategoryId()));
+            String categoryName = db.getCategoryNameById(t.getCategoryId());
+            txtCategory.setText(categoryName);
             Log.d("debug setToday data", ""+t.getCategoryId());
             lnlTaskList.addView(view);
 

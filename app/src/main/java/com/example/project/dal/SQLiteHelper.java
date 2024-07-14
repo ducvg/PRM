@@ -222,28 +222,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return taskList;
     }
 
-    public long addTask(Task task) {
-        ContentValues values = new ContentValues();
-        values.put("Title", task.getTitle());
-        values.put("Description", task.getDescription());
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-        String dueDateString = sdf.format(task.getDueDate());
-        values.put("DueDate", dueDateString);
-        values.put("Status", task.getStatus());
-        values.put("CategoryId", task.getCategoryId());
-        long insertedId = -1;
-        try (SQLiteDatabase db = this.getWritableDatabase()) {
-            insertedId = db.insert("Task", null, values);
-            if(insertedId != -1){
-                recordChanges((int)insertedId,1);
-            }
-        } catch (SQLException e) {
-            Log.e("SQLite", "Error inserting task", e);
-        }
-
-        return insertedId;
-    }
-
     public void syncTask(List<Task> data) {
         SQLiteDatabase db = this.getWritableDatabase();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -322,9 +300,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         String[] selectionArgs = new String[]{""+taskId};
         Cursor cursor = db.rawQuery(query,selectionArgs);
 
-        int count = 0;  // Initialize count to handle potential errors
+        int count = 0; 
         if (cursor.moveToFirst()) {
-            count = cursor.getInt(0);  // Retrieve count from the first column
+            count = cursor.getInt(0); 
         }
 
         if (count == 0) {
@@ -507,33 +485,46 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return listtasks;
     }
 
+    public long addTask(Task task) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Title", task.getTitle());
+        values.put("Description", task.getDescription());
+        values.put("DueDate", sdf.format(task.getDueDate()));
+        values.put("Status", task.getStatus());
+        values.put("CategoryId", task.getCategoryId());
+        Log.d("debug sqlite synctask","categ: "+task.getCategoryId());
+        long result = db.insert("Task", null, values);
+        db.close();
+        return result;
+    }
 
+    public String getCategoryNameById(int categoryId) {
+        String categoryName = null;
+        SQLiteDatabase db = this.getReadableDatabase();
 
-//    public void updateTask(@NonNull Task task) {
-//        ContentValues values = new ContentValues();
-//        values.put("Title", task.getTitle());
-//        values.put("Description", task.getDescription());
-//        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.US);
-//        String dueDateString = sdf.format(task.getDueDate());
-//        values.put("DueDate", dueDateString);
-//        values.put("Status", task.getStatus());
-//        values.put("CategoryId", task.getCategoryId());
-//
-//        String whereClause = "TaskId = ?";
-//        String[] whereArgs = {String.valueOf(task.getTaskId())};
-//
-//        try (SQLiteDatabase db = this.getWritableDatabase()) {
-//            int rowsAffected = db.update("Task", values, whereClause, whereArgs);
-//            if (rowsAffected > 0) {
-//                recordChanges(task.getTaskId(),0);
-//                Log.d("SQLiteHelper", "Updated Task with TaskId: " + task.getTaskId());
-//            } else {
-//                Log.e("SQLiteHelper", "Failed to update Task with TaskId: " + task.getTaskId());
-//            }
-//        } catch (SQLException e) {
-//            Log.e("SQLiteHelper", "Error updating task", e);
-//        }
-//    }
+        String[] projection = { "CategoryName" };
+        String selection = "CategoryId = ?";
+        String[] selectionArgs = { String.valueOf(categoryId) };
+
+        Cursor cursor = db.query(
+                "Category",     // Tên bảng
+                projection,     // Các cột cần lấy
+                selection,      // Điều kiện WHERE
+                selectionArgs,  // Giá trị thay thế cho điều kiện WHERE
+                null,           // GROUP BY
+                null,           // HAVING
+                null            // ORDER BY
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            categoryName = cursor.getString(cursor.getColumnIndexOrThrow("CategoryName"));
+            cursor.close();
+        }
+
+        return categoryName;
+    }
 
     public void addCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -598,142 +589,4 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         return categoryList;
     }
-
-
-
-//    public List<Category> getAllCategory() {
-//        List<Category> categoryList = new ArrayList<>();
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = null;
-//
-//            cursor = db.query(
-//                    "Category",    // Tên bảng
-//                    null,      // Lấy tất cả các cột
-//                    null,      // Không có điều kiện WHERE
-//                    null,      // Không có giá trị thay thế cho điều kiện WHERE
-//                    null,      // Không GROUP BY
-//                    null,      // Không có điều kiện HAVING
-//                    null       // Không có điều kiện ORDER BY
-//            );
-//
-//            if (cursor != null && cursor.moveToFirst()) {
-//                do {
-//                    int id = cursor.getInt(1);
-//                    String name = cursor.getString(2);
-//                    Category category = new Category(id, name);
-//                    categoryList.add(category);
-//                    Log.d("Category", "ID: " + id + ", Name: " + name);
-//                } while (cursor.moveToNext());
-//            }
-//
-//            if (cursor != null) {
-//                cursor.close();
-//            }
-//        return categoryList;
-//    }
-
-
-
-//    public void updateTask(Task task) {
-//
-//        ContentValues values = new ContentValues();
-//        values.put("Title", task.getTitle());
-//        values.put("Description", task.getDescription());
-//        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.US);
-//        String dueDateString = sdf.format(task.getDueDate());
-//        values.put("DueDate", dueDateString);
-//        values.put("Status", task.getStatus());
-//        values.put("CategoryId", task.getCategoryId());
-//        String whereClause = "TaskId = ?";
-//        String[] whereArgs = {String.valueOf(task.getTaskId())};
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        int rowsAffected = db.update("Task", values, whereClause, whereArgs);
-//        if (rowsAffected > 0) {
-//            Log.d("SQLiteHelper", "Updated Task with TaskId: " + task.getTaskId());
-//        } else {
-//            Log.e("SQLiteHelper", "Failed to update Task with TaskId: " + task.getTaskId());
-//        }
-//        db.close();
-//    }
-    //    public Category getCategoryById(int categoryId) {
-//        Category category = null;
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = null;
-//
-//        try {
-//            String[] projection = {"CategoryId", "CategoryName"};
-//            String selection = "CategoryId = ?";
-//            String[] selectionArgs = {String.valueOf(categoryId)};
-//
-//            cursor = db.query(
-//                    "Category",    // Tên bảng
-//                    projection,    // Các cột cần lấy
-//                    selection,     // Điều kiện WHERE
-//                    selectionArgs, // Giá trị thay thế cho điều kiện WHERE
-//                    null,          // GROUP BY
-//                    null,          // HAVING
-//                    null           // ORDER BY
-//            );
-//
-//            if (cursor != null && cursor.moveToFirst()) {
-//                int id = cursor.getInt(cursor.getColumnIndexOrThrow("CategoryId"));
-//                String name = cursor.getString(cursor.getColumnIndexOrThrow("CategoryName"));
-//                category = new Category(id, name);
-//            }
-//        } catch (Exception e) {
-//            Log.e("SQLiteHelper", "Error retrieving category by id: " + e.getMessage());
-//        } finally {
-//            if (cursor != null) {
-//                cursor.close();
-//            }
-//        }
-//
-//        return category;
-//    }
-//    public List<Task> getAllTasks() {
-//        List<Task> taskList = new ArrayList<>();
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.query(
-//                "Task",    // Tên bảng
-//                null,      // Lấy tất cả các cột
-//                null,      // Không có điều kiện WHERE
-//                null,      // Không có giá trị thay thế cho điều kiện WHERE
-//                null,      // Không GROUP BY
-//                null,      // Không có điều kiện HAVING
-//                null       // Không có điều kiện ORDER BY
-//        );
-//
-//        if (cursor != null && cursor.moveToFirst()) {
-//            do {
-//                int taskid = cursor.getInt(0);
-//                String title = cursor.getString(1);
-//                String description = cursor.getString(2);
-//                String dueDateStr = cursor.getString(3);
-//                int status = cursor.getInt(4);
-//                int categoryId = cursor.getInt(5);
-//                Log.d("getAllTasks", "DueDateStr: " + dueDateStr);
-//                SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.US);
-//                Date dueDate = null;
-//                try {
-//                    dueDate = formatter.parse(dueDateStr);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                // Kiểm tra và in giá trị dueDate
-//                if (dueDate == null) {
-//                    Log.e("getAllTasks", "Failed to parse dueDate: " + dueDateStr);
-//                } else {
-//                    Log.d("getAllTasks", "Parsed dueDate: " + dueDate.toString());
-//                }
-//
-//                Task task = new Task(taskid, title, description, dueDate, status, categoryId);
-//                taskList.add(task);
-//            } while (cursor.moveToNext());
-//
-//            cursor.close();
-//        }
-//
-//        return taskList;
-//    }
 }
