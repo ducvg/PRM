@@ -52,7 +52,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
 
 
 
-    public TodayTaskViewHolder(@NonNull View itemView) {
+    public TodayTaskViewHolder(@NonNull View itemView, List<String> days) {
         super(itemView);
         bindingView();
         bindingAction();
@@ -81,6 +81,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
             txtDue.setText(t.getDueDate().toString());
             String categoryName = db.getCategoryNameById(t.getCategoryId());
             txtCategory.setText(categoryName);
+            Log.d("debug setToday data", ""+t.getCategoryId());
             lnlTaskList.addView(view);
             txtTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
