@@ -195,7 +195,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "JOIN LocalChanges ON Task.TaskId = LocalChanges.TaskId";
 
         Cursor cursor = db.rawQuery(query, null);
-        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 
         while (cursor != null && cursor.moveToNext()) {
             int taskId = cursor.getInt(0);
@@ -204,13 +204,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             String dueDateStr = cursor.getString(3);
             Date dueDate = null;
             try {
-                dueDate = formatter.parse(dueDateStr);
+                dueDate = sdf.parse(dueDateStr);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             int status = cursor.getInt(4);
             int categoryId = cursor.getInt(5);
-            int operation = cursor.getInt(6);
+            boolean operation = cursor.getInt(6) == 1;
             // Create Task object and add to the list
             TaskDTO task = new TaskDTO(taskId, title, description, dueDate, status, categoryId, operation);
             taskList.add(task);
@@ -220,6 +220,28 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.close();
 
         return taskList;
+    }
+
+    public long addTask(Task task) {
+        ContentValues values = new ContentValues();
+        values.put("Title", task.getTitle());
+        values.put("Description", task.getDescription());
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+        String dueDateString = sdf.format(task.getDueDate());
+        values.put("DueDate", dueDateString);
+        values.put("Status", task.getStatus());
+        values.put("CategoryId", task.getCategoryId());
+        long insertedId = -1;
+        try (SQLiteDatabase db = this.getWritableDatabase()) {
+            insertedId = db.insert("Task", null, values);
+            if(insertedId != -1){
+                recordChanges((int)insertedId,1);
+            }
+        } catch (SQLException e) {
+            Log.e("SQLite", "Error inserting task", e);
+        }
+
+        return insertedId;
     }
 
     public void syncTask(List<Task> data) {
@@ -235,9 +257,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             values.put("DueDate", dueDateString);
             values.put("Status", task.getStatus());
             values.put("CategoryId", task.getCategoryId());
-            Log.d("debug sqlite synctask","categ: "+task.getCategoryId());
-
-
             String query = "SELECT COUNT(*) FROM Task WHERE TaskId = ?";
             Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(task.getTaskId())});
             if (cursor != null) {
@@ -302,7 +321,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         String query = "SELECT COUNT(*) FROM LocalChanges WHERE TaskId = ?";
         String[] selectionArgs = new String[]{""+taskId};
         Cursor cursor = db.rawQuery(query,selectionArgs);
-        int count = cursor.getInt(0);
+
+        int count = 0;  // Initialize count to handle potential errors
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);  // Retrieve count from the first column
+        }
+
         if (count == 0) {
             ContentValues cv = new ContentValues();
             cv.put("TaskId", taskId);
@@ -313,6 +337,32 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateTask(@NonNull Task task) {
+        ContentValues values = new ContentValues();
+        values.put("Title", task.getTitle());
+        values.put("Description", task.getDescription());
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.US);
+        String dueDateString = sdf.format(task.getDueDate());
+        values.put("DueDate", dueDateString);
+        values.put("Status", task.getStatus());
+        values.put("CategoryId", task.getCategoryId());
+
+        String whereClause = "TaskId = ?";
+        String[] whereArgs = {String.valueOf(task.getTaskId())};
+
+        try (SQLiteDatabase db = this.getWritableDatabase()) {
+            int rowsAffected = db.update("Task", values, whereClause, whereArgs);
+            if (rowsAffected > 0) {
+                Log.d("debug sqlite updatetask",task.getTaskId()+"");
+                recordChanges(task.getTaskId(),0);
+                Log.d("SQLiteHelper", "Updated Task with TaskId: " + task.getTaskId());
+            } else {
+                Log.e("SQLiteHelper", "Failed to update Task with TaskId: " + task.getTaskId());
+            }
+        } catch (SQLException e) {
+            Log.e("SQLiteHelper", "Error updating task", e);
+        }
+    }
 
     public List<Task> getByDateToday(String date) {
         List<Task> listtasks = new ArrayList<>();
@@ -457,28 +507,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return listtasks;
     }
 
-    public long addTask(Task task) {
-        ContentValues values = new ContentValues();
-        values.put("Title", task.getTitle());
-        values.put("Description", task.getDescription());
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-        String dueDateString = sdf.format(task.getDueDate());
-        values.put("DueDate", dueDateString);
-        values.put("Status", task.getStatus());
-        values.put("CategoryId", task.getCategoryId());
-        long insertedId = -1;
 
-        try (SQLiteDatabase db = this.getWritableDatabase()) {
-            insertedId = db.insert("Task", null, values);
-            if(insertedId != -1){
-                recordChanges((int)insertedId,1);
-            }
-        } catch (SQLException e) {
-            Log.e("SQLite", "Error inserting task", e);
-        }
-
-        return insertedId;
-    }
 
 //    public void updateTask(@NonNull Task task) {
 //        ContentValues values = new ContentValues();
@@ -570,30 +599,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return categoryList;
     }
 
-    public void updateTask(@NonNull Task task) {
-        ContentValues values = new ContentValues();
-        values.put("Title", task.getTitle());
-        values.put("Description", task.getDescription());
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.US);
-        String dueDateString = sdf.format(task.getDueDate());
-        values.put("DueDate", dueDateString);
-        values.put("Status", task.getStatus());
-        values.put("CategoryId", task.getCategoryId());
 
-        String whereClause = "TaskId = ?";
-        String[] whereArgs = {String.valueOf(task.getTaskId())};
-
-        try (SQLiteDatabase db = this.getWritableDatabase()) {
-            int rowsAffected = db.update("Task", values, whereClause, whereArgs);
-            if (rowsAffected > 0) {
-                Log.d("SQLiteHelper", "Updated Task with TaskId: " + task.getTaskId());
-            } else {
-                Log.e("SQLiteHelper", "Failed to update Task with TaskId: " + task.getTaskId());
-            }
-        } catch (SQLException e) {
-            Log.e("SQLiteHelper", "Error updating task", e);
-        }
-    }
 
 //    public List<Category> getAllCategory() {
 //        List<Category> categoryList = new ArrayList<>();

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 public class TaskDTO {
-    @SerializedName("TaskId")
+    @SerializedName("taskId")
     @Expose
     private int taskId;
     @SerializedName("Title")
@@ -26,7 +26,7 @@ public class TaskDTO {
     private int categoryId;
     @SerializedName("Operation")
     @Expose
-    private int operation;
+    private boolean operation;
 
     public int getTaskId() {
         return taskId;
@@ -76,18 +76,18 @@ public class TaskDTO {
         this.categoryId = categoryId;
     }
 
-    public int getOperation() {
+    public boolean getOperation() {
         return operation;
     }
 
-    public void setOperation(int operation) {
+    public void setOperation(boolean operation) {
         this.operation = operation;
     }
 
     public TaskDTO() {
     }
 
-    public TaskDTO(int taskId, String title, String description, Date dueDate, int status, int categoryId, int operation) {
+    public TaskDTO(int taskId, String title, String description, Date dueDate, int status, int categoryId, boolean operation) {
         this.taskId = taskId;
         this.title = title;
         this.description = description;

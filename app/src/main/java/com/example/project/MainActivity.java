@@ -135,7 +135,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         btnCreate = container.findViewById(R.id.btnCreate);
         btnCancel = container.findViewById(R.id.btnCancel);
         loadSpinnerData();
+    }
 
+    private void bindingAction() {
+        getApplicationContext();
+        fab.setOnClickListener(this::openCreateWindow);
+        txtDueDate.setOnClickListener(this::openDatePicker);
+        txtDueTime.setOnClickListener(this::openTimePicker);
+        btnCancel.setOnClickListener(v -> createWindow.dismiss());
+        btnCreate.setOnClickListener(this::addTask);
     }
 
     private void loadSpinnerData() {
@@ -158,16 +166,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         createWindow.setTouchable(true);
     }
 
-    private void bindingAction() {
-        getApplicationContext();
-        fab.setOnClickListener(this::openCreateWindow);
-        txtDueDate.setOnClickListener(this::openDatePicker);
-        txtDueTime.setOnClickListener(this::openTimePicker);
-        btnCancel.setOnClickListener(v -> createWindow.dismiss());
-        btnCreate.setOnClickListener(this::addTask);
 
-
-    }
 
     private void addTask(View view) {
         String title = edtTitle.getText().toString().trim();
