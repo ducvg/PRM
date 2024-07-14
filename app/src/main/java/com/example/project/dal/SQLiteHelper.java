@@ -458,26 +458,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public long addTask(Task task) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("Title", task.getTitle());
         values.put("Description", task.getDescription());
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-        String dueDateString = sdf.format(task.getDueDate());
-        values.put("DueDate", dueDateString);
+        values.put("DueDate", sdf.format(task.getDueDate()));
         values.put("Status", task.getStatus());
         values.put("CategoryId", task.getCategoryId());
-        long insertedId = -1;
-
-        try (SQLiteDatabase db = this.getWritableDatabase()) {
-            insertedId = db.insert("Task", null, values);
-            if(insertedId != -1){
-                recordChanges((int)insertedId,1);
-            }
-        } catch (SQLException e) {
-            Log.e("SQLite", "Error inserting task", e);
-        }
-
-        return insertedId;
+        Log.d("debug sqlite synctask","categ: "+task.getCategoryId());
+        long result = db.insert("Task", null, values);
+        db.close();
+        return result;
     }
 
 //    public void updateTask(@NonNull Task task) {
