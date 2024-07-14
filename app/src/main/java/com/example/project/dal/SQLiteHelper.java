@@ -467,6 +467,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put("Status", task.getStatus());
         values.put("CategoryId", task.getCategoryId());
         long insertedId = -1;
+
         try (SQLiteDatabase db = this.getWritableDatabase()) {
             insertedId = db.insert("Task", null, values);
             if(insertedId != -1){

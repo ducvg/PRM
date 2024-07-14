@@ -138,7 +138,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
         // Đặt giá trị từ task vào các view
         etTaskTitle.setText(task.getTitle());
         etTaskDescription.setText(task.getDescription());
-        spnTaskCategory.setSelection(task.getCategoryId());
+        spnTaskCategory.setSelection(task.getCategoryId()-1);
         Date dueDate = task.getDueDate();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
         String formattedDueDate = dateFormat.format(dueDate);
