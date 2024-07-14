@@ -241,15 +241,22 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 cursor.moveToFirst();
                 int count = cursor.getInt(0);
                 cursor.close();
-                if (count > 0) {
-                    db.update("Task", values, "TaskId = ?", new String[]{String.valueOf(task.getTaskId())});
-                } else {
+                if (count == 0) {
                     db.insert("Task", null, values);
+                } else {
+                    db.update("Task", values, "TaskId = ?", new String[]{String.valueOf(task.getTaskId())});
                 }
             }
         }
 
         db.delete("LocalChanges", null, null);
+        db.close();
+    }
+
+    public void clearData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("LocalChanges", null, null);
+        db.delete("Task", null, null);
         db.close();
     }
 
@@ -496,6 +503,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put("CategoryId", task.getCategoryId());
         Log.d("debug sqlite synctask","categ: "+task.getCategoryId());
         long result = db.insert("Task", null, values);
+        recordChanges((int)result,1);
         db.close();
         return result;
     }

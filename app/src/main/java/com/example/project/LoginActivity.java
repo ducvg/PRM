@@ -2,11 +2,13 @@ package com.example.project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +34,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     private EditText edtEmail;
     private EditText edtPassword;
-    private Button btnRegister;
+    private TextView txtOffline;
     private Button btnLogin;
     private Context context;
     private SQLiteHelper db;
@@ -50,22 +52,24 @@ public class LoginActivity extends AppCompatActivity {
 
     private void bindingAction() {
         btnLogin.setOnClickListener(this::login);
-        btnRegister.setOnClickListener(this::register);
+        txtOffline.setOnClickListener(this::offlineMode);
     }
 
-    private void register(View view) {
-
+    private void offlineMode(View view) {
     }
 
     private void login(View view) {
         btnLogin.setClickable(false);
         String email = edtEmail.getText().toString();
         String password = edtPassword.getText().toString();
-
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginActivity", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         if(email.isBlank() || password.isBlank()){
             Toast.makeText(this,"Email and Password must not be empty !", Toast.LENGTH_SHORT).show();
+            btnLogin.setClickable(true);
             return;
         }
+        Toast.makeText(this,"Logging in ...", Toast.LENGTH_LONG).show();
         LoginDTO user = new LoginDTO(email,password);
         try {
             ApiService.getUserApiEndpoint()
@@ -73,10 +77,24 @@ public class LoginActivity extends AppCompatActivity {
                     .enqueue(new Callback<TokenDTO>() {
                         @Override
                         public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
-                            AppConfig.token = response.body().getToken();
+                            TokenDTO dto = response.body();
+                            AppConfig.token = dto.getToken();
+                            String email = dto.getEmail();
+                            String lastEmail = sharedPreferences.getString("lastEmail", "");
+                            Log.d("debug login ok",email+"|"+lastEmail);
+                            if(!email.equals(lastEmail) && !lastEmail.isBlank()){
+//                              Todo
+//                              warn change account will lost all local change
+//                              if localchanges > 0, warn all changes apply to this acc
+
+                                editor.putString("lastEmail", email);
+                                editor.apply();
+                                db.clearData();
+                            }
                             Log.d("debug login ok token", AppConfig.token);
                             syncCategory();
                             syncTask();
+                            AppConfig.isOffline = false;
                         }
 
                         @Override
@@ -121,11 +139,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void syncTask(){
         List<TaskDTO> userTasks = db.getAllLocalTask();
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                .create();
-        String json = gson.toJson(userTasks);
-        Log.d("debug sync task", "JSON data sent to server: " + json);
         try {
             ApiService.getTaskApiEndpoint()
                     .updateServer(userTasks)
@@ -160,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
     private void bindingView() {
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
-        btnRegister = findViewById(R.id.btnRegister);
+        txtOffline = findViewById(R.id.txtOffline);
         btnLogin = findViewById(R.id.btnLogin);
     }
 

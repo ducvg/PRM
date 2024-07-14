@@ -51,7 +51,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
     private TimePickerDialog timePickerDialog;
     private View popupView;
 
-    public TodayTaskViewHolder(@NonNull View itemView, List<String> days) {
+    public TodayTaskViewHolder(@NonNull View itemView) {
         super(itemView);
         selectDate = LocalDateTime.now();
         bindPopup();
@@ -131,7 +131,6 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
             txtDue.setText(t.getDueDate().toString());
             String categoryName = db.getCategoryNameById(t.getCategoryId());
             txtCategory.setText(categoryName);
-            Log.d("debug setToday data", ""+t.getCategoryId());
             lnlTaskList.addView(view);
 
         }
