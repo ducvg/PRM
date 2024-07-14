@@ -472,6 +472,32 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public String getCategoryNameById(int categoryId) {
+        String categoryName = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = { "CategoryName" };
+        String selection = "CategoryId = ?";
+        String[] selectionArgs = { String.valueOf(categoryId) };
+
+        Cursor cursor = db.query(
+                "Category",     // Tên bảng
+                projection,     // Các cột cần lấy
+                selection,      // Điều kiện WHERE
+                selectionArgs,  // Giá trị thay thế cho điều kiện WHERE
+                null,           // GROUP BY
+                null,           // HAVING
+                null            // ORDER BY
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            categoryName = cursor.getString(cursor.getColumnIndexOrThrow("CategoryName"));
+            cursor.close();
+        }
+
+        return categoryName;
+    }
+
 //    public void updateTask(@NonNull Task task) {
 //        ContentValues values = new ContentValues();
 //        values.put("Title", task.getTitle());
