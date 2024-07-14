@@ -49,23 +49,72 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
     private DatePickerDialog datePickerDialog;
     private static LocalDateTime selectDate;
     private TimePickerDialog timePickerDialog;
-
-
+    private View popupView;
 
     public TodayTaskViewHolder(@NonNull View itemView) {
         super(itemView);
+        selectDate = LocalDateTime.now();
+        bindPopup();
         bindingView();
         bindingAction();
+        bindDatePicker();
+        bindTimePicker();
         db = new SQLiteHelper(itemView.getContext());
     }
 
-    private void bindingAction() {
+    private void bindPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
+        LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
+        popupView = inflater.inflate(R.layout.activity_update_edit, null);
+        builder.setView(popupView);
+        alertDialog = builder.create();
+    }
 
+    private void bindingAction() {
+        txtTaskDueDate.setOnClickListener(this::openDatePicker);
+        txtTaskDueTime.setOnClickListener(this::openTimePicker);
     }
 
     private void bindingView() {
         txtTaskDate = itemView.findViewById(R.id.txtTaskDate);
         lnlTaskList = itemView.findViewById(R.id.lnlTaskList);
+
+        etTaskTitle = popupView.findViewById(R.id.edtitle);
+        etTaskDescription = popupView.findViewById(R.id.edtAddDescription);
+        spnTaskCategory = popupView.findViewById(R.id.spnCategory);
+        txtTaskDueDate = popupView.findViewById(R.id.txtDueDate);
+        txtTaskDueTime = popupView.findViewById(R.id.txtDueTime);
+    }
+
+    private void bindDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, day) -> {
+            selectDate = selectDate.withYear(year)
+                    .withMonth(month + 1)
+                    .withDayOfMonth(day);
+            updateDueTV();
+        };
+
+        datePickerDialog = new DatePickerDialog(itemView.getContext(),
+                android.R.style.Theme_Material_Light_Dialog,
+                dateSetListener,
+                selectDate.getYear(), selectDate.getMonthValue() - 1, selectDate.getDayOfMonth());
+    }
+
+    private void bindTimePicker(){
+        TimePickerDialog.OnTimeSetListener timeSetLisener =  (view, hourOfDay, minute) -> {
+            selectDate = selectDate.withHour(hourOfDay)
+                    .withMinute(minute);
+            Log.d("debug timepick",selectDate.toString());
+            updateDueTV();
+        };
+        timePickerDialog = new TimePickerDialog(itemView.getContext(),
+                timeSetLisener,
+                selectDate.getHour(), selectDate.getMinute(),true);
+    }
+
+    private void updateDueTV() {
+        txtTaskDueDate.setText(selectDate.toLocalDate().toString());
+        txtTaskDueTime.setText(String.format("%02d:%02d", selectDate.getHour(), selectDate.getMinute()));
     }
 
     public void setData(String date, List<Task> thisDayTask) {
@@ -75,25 +124,14 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
         for (Task t : thisDayTask) {
             View view = inflater.inflate(R.layout.task, lnlTaskList, false);
             bindingItemView(view);
-            bindingItemAction();
+            bindingItemAction(t);
+
             txtTitle.setText(t.getTitle());
             txtDescription.setText(t.getDescription());
             txtDue.setText(t.getDueDate().toString());
             String categoryName = db.getCategoryNameById(t.getCategoryId());
             txtCategory.setText(categoryName);
             lnlTaskList.addView(view);
-            txtTitle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    // Hiển thị popup edit khi người dùng click vào txtTitle
-                    if (t != null) {
-                        showEditDialog(t);
-                    } else {
-                        Toast.makeText(itemView.getContext(), "Không có task được chọn", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
 
         }
     }
@@ -106,23 +144,14 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
 
     }
 
-    private void bindingItemAction () {
-            cbTodo.setOnCheckedChangeListener(this::checkStatus);
-
-        }
+    private void bindingItemAction (Task t) {
+        cbTodo.setOnCheckedChangeListener(this::checkStatus);
+        txtTitle.setOnClickListener(v -> showEditDialog(t));
+        txtDescription.setOnClickListener(v -> showEditDialog(t));
+    }
 
     private void showEditDialog(Task task) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
-        LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
-        View popupView = inflater.inflate(R.layout.activity_update_edit, null);
-
-        // Khởi tạo các view từ popupView
-        etTaskTitle = popupView.findViewById(R.id.edtitle);
-        etTaskDescription = popupView.findViewById(R.id.edtAddDescription);
-        spnTaskCategory = popupView.findViewById(R.id.spnCategory);
-        txtTaskDueDate = popupView.findViewById(R.id.txtDueDate);
-        txtTaskDueTime = popupView.findViewById(R.id.txtDueTime);
 
 
         txtTaskDueDate.setOnClickListener(this::openDatePicker);
@@ -150,7 +179,6 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
         }catch (Exception e){
             Log.d("erorrrrrrr",e.getMessage());
         }
-
 
 
         Button btnUpdate = popupView.findViewById(R.id.btnUpdate);
@@ -195,8 +223,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
 
 
         // Tạo và hiển thị AlertDialog
-        builder.setView(popupView);
-        alertDialog = builder.create();
+
         alertDialog.show();
 
     }
@@ -208,7 +235,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
             timePickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#008374"));
             timePickerDialog.getActionBar().hide();
         } catch (Exception e) {
-            Log.d("opendaypicker", e.getMessage());
+            Log.d("opentimepicker", e.getMessage());
         }
     }
 

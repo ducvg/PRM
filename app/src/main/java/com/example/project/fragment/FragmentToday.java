@@ -41,19 +41,6 @@ public class FragmentToday extends Fragment {
         rcvRecentDay = getView().findViewById(R.id.rcvRecentDay);
     }
 
-//    @Override
-//    public void onTaskClick(View view, int position) {
-//        Task task = adapter.getTask(position);
-//        Intent intent = new Intent(getActivity(), UpdateEditActivity.class);
-//        intent.putExtra("task",task);
-//        startActivity(intent);
-//    }
-//
-//    @Override
-//    public void onTaskStatusChange(Task task, boolean isChecked) {
-//
-//    }
-
     @Override
     public void onResume() {
         super.onResume();
