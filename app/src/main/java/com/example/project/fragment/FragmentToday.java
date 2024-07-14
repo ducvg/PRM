@@ -1,5 +1,4 @@
 package com.example.project.fragment;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,6 @@ import com.example.project.fragment.Today.TodayTaskAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class FragmentToday extends Fragment {
     private TodayTaskAdapter taskAdapter;
@@ -44,7 +41,6 @@ public class FragmentToday extends Fragment {
         rcvRecentDay = getView().findViewById(R.id.rcvRecentDay);
     }
 
-
 //    @Override
 //    public void onTaskClick(View view, int position) {
 //        Task task = adapter.getTask(position);
@@ -57,7 +53,7 @@ public class FragmentToday extends Fragment {
 //    public void onTaskStatusChange(Task task, boolean isChecked) {
 //
 //    }
-//
+
     @Override
     public void onResume() {
         super.onResume();

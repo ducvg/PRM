@@ -1,6 +1,5 @@
 package com.example.project.fragment.Upcoming;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -10,11 +9,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.R;
-import com.example.project.dal.SQLiteHelper;
 import com.example.project.model.Task;
 
 import java.time.LocalDate;

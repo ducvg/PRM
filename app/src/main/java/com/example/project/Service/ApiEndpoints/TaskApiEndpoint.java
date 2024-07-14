@@ -1,7 +1,10 @@
 package com.example.project.Service.ApiEndpoints;
 
 import com.example.project.model.ServiceModel.ListResponse;
+import com.example.project.model.ServiceModel.TaskDTO;
 import com.example.project.model.Task;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -21,6 +24,9 @@ public interface TaskApiEndpoint {
     @GET("task")
     Call<ListResponse<Task>> getFilterTasks(@Query("$filter") String filter);
 
+    @GET("task")
+    Call<ListResponse<Task>> getUserTask();
+
     @POST("task")
     Call<Task> createTask(@Body Task task);
 
@@ -32,4 +38,7 @@ public interface TaskApiEndpoint {
 
     @DELETE("task/{id}")
     Call<Void> deleteTask(@Path("id") int taskId);
+
+    @POST("task/sync")
+    Call<List<Task>> updateServer(@Body List<TaskDTO> userTasks);
 }

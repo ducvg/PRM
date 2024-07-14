@@ -2,6 +2,9 @@ package com.example.project.Service.ApiEndpoints;
 
 import com.example.project.model.Category;
 import com.example.project.model.ServiceModel.ListResponse;
+import com.example.project.model.Task;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -13,24 +16,25 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface CategoryApiEndpoint {
-        @GET("/Category")
-        Call<ListResponse<Category>> getAllTask();
+        @GET("Category")
+        Call<ListResponse<Category>> getAllCategory();
 
-        @GET("/Category/{id}")
+        @GET("Category/{id}")
         Call<Category> getCategoryById(@Path("id") int id);
 
-        @GET("/Category?$filter=name eq '{name}'")
+        @GET("Category?$filter=name eq '{name}'")
         Call<ListResponse<Category>> getCategoryByName(@Path("name") String name);
 
-        @POST("/Category")
+        @POST("Category")
         Call<Category> createCategory(@Body Category user);
 
-        @PUT("/Category/{id}")
+        @PUT("Category/{id}")
         Call<Category> updateCategory(@Path("id") int id, @Body Category cate);
 
-        @PATCH("/Category/{id}")
+        @PATCH("Category/{id}")
         Call<Category> patchCategory(@Path("id") int id, @Body Category cate);
 
-        @DELETE("/Category/{id}")
+        @DELETE("Category/{id}")
         Call<Void> deleteCategory(@Path("id") int id);
+
 }

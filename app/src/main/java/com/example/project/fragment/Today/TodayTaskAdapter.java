@@ -10,18 +10,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.R;
 import com.example.project.dal.SQLiteHelper;
-import com.example.project.fragment.Upcoming.UpcomingTaskAdapter;
 import com.example.project.model.Task;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskViewHolder> {
     private List<String> recentDate;
     private SQLiteHelper db;
-
 
 
     public TodayTaskAdapter(List<String> recentDate) {
@@ -33,7 +32,6 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskViewHolder> 
     public TodayTaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.fragment_task, parent, false);
-        Log.d("debug today adapter","run");
         db = new SQLiteHelper(parent.getContext());
         return new TodayTaskViewHolder(view, recentDate);
     }
@@ -58,7 +56,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskViewHolder> 
                 thisDayTask = new ArrayList<>();
                 break;
         }
-        Log.d("debug today adapter",thisDayTask.toArray().toString());
+        Log.d("debug today adapter", Arrays.toString(thisDayTask.toArray()));
         holder.setData(date,thisDayTask);
     }
 

@@ -5,87 +5,35 @@ import com.google.gson.annotations.SerializedName;
 
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Task implements Serializable {
 
-    @SerializedName("TaskId")
+    @SerializedName("taskId")
     @Expose
     private int taskId;
-    @SerializedName("UserId")
-    @Expose
-    private int userId;
-    @SerializedName("Title")
+    @SerializedName("title")
     @Expose
     private String title;
-    @SerializedName("Description")
+    @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("DueDate")
+    @SerializedName("dueDate")
     @Expose
     private Date dueDate;
-    @SerializedName("CreatedAt")
+    @SerializedName("createdAt")
     @Expose
     private Date createdAt;
-    @SerializedName("UpdatedAt")
+    @SerializedName("updatedAt")
     @Expose
     private Date updatedAt;
-    @SerializedName("Status")
+    @SerializedName("status")
     @Expose
     private int status;
-    @SerializedName("CategoryId")
+    @SerializedName("categoryId")
     @Expose
     private int categoryId;
     private int isLocal;  //SQLite type integer
-
-    public int isLocal() {
-        return isLocal;
-    }
-
-    public void setLocal(int local) {
-        isLocal = local;
-    }
-
-    public Task(int taskId, int userId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId, int isLocal) {
-        this.taskId = taskId;
-        this.userId = userId;
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.status = status;
-        this.categoryId = categoryId;
-        this.isLocal = isLocal;
-    }
-
-    public Task() {
-    }
-
-    public Task(int taskId, String title, String description, Date dueDate, int status, int categoryId) {
-        this.taskId = taskId;
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.status = status;
-        this.categoryId = categoryId;
-    }
-
-
-    public Task(int taskId, int userId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId) {
-        this.taskId = taskId;
-        this.userId = userId;
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.status = status;
-        this.categoryId = categoryId;
-    }
 
     public Task(String title, String description, Date dueDate, int categoryId) {
         this.title = title;
@@ -94,35 +42,12 @@ public class Task implements Serializable {
         this.categoryId = categoryId;
     }
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "taskId=" + taskId +
-                ", userId=" + userId +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", dueDate=" + dueDate +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", status=" + status +
-                ", categoryId=" + categoryId +
-                '}';
-    }
-
     public int getTaskId() {
         return taskId;
     }
 
     public void setTaskId(int taskId) {
         this.taskId = taskId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getTitle() {
@@ -180,4 +105,62 @@ public class Task implements Serializable {
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
+
+    public int getIsLocal() {
+        return isLocal;
+    }
+
+    public void setIsLocal(int isLocal) {
+        this.isLocal = isLocal;
+    }
+
+    public Task(int taskId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId) {
+        this.taskId = taskId;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.status = status;
+        this.categoryId = categoryId;
+    }
+
+    public Task(int taskId, String title, String description, Date dueDate, Date createdAt, Date updatedAt, int status, int categoryId, int isLocal) {
+        this.taskId = taskId;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.status = status;
+        this.categoryId = categoryId;
+        this.isLocal = isLocal;
+    }
+
+    public Task(int taskId, String title, String description, Date dueDate, int status, int categoryId) {
+        this.categoryId = categoryId;
+        this.status = status;
+        this.dueDate = dueDate;
+        this.description = description;
+        this.title = title;
+        this.taskId = taskId;
+    }
+
+    public Task() {
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId=" + taskId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", dueDate=" + dueDate +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", status=" + status +
+                ", categoryId=" + categoryId +
+                '}';
+    }
+
 }
