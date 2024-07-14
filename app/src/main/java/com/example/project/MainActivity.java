@@ -208,6 +208,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void openCreateWindow(View view) {
+        View background = new View(this);
+        background.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        background.setBackgroundColor(Color.parseColor("#88000000")); // Màu xám mờ
+        mainLayout.addView(background);
+
+        // Làm mờ nền phía sau
+        background.setAlpha(0.5f);
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+        bottomNav.setVisibility(View.GONE);
+
+
+        createWindow.setOnDismissListener(() -> {
+            // Khôi phục nền khi popup bị đóng
+            mainLayout.removeView(background);
+            bottomNav.setVisibility(View.VISIBLE);
+        });
         createWindow.showAtLocation(mainLayout, Gravity.CENTER,0, 0);
     }
 

@@ -95,7 +95,11 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
                     }
                 }
             });
-
+            if(t.getStatus()==0){
+                cbTodo.setChecked(false);
+            }else if(t.getStatus()==1){
+                cbTodo.setChecked(true);
+            }
         }
     }
     private void bindingItemView (View view){
@@ -154,7 +158,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
 
 
 
-        Button btnUpdate = popupView.findViewById(R.id.btnUpdate);
+        btnUpdate = popupView.findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,7 +189,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
             }
         });
 
-        Button btnCancel = popupView.findViewById(R.id.btnCancel);
+        btnCancel = popupView.findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,8 +233,6 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
 
 
     }
-
-
 
     @Override
     public void onClick(View view) {

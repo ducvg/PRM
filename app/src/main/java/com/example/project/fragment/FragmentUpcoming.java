@@ -217,5 +217,10 @@ public class FragmentUpcoming extends Fragment implements UpcomingCalendarAdapte
     @Override
     public void onResume() {
         super.onResume();
+        CalendarUtils.todayDateTime = LocalDateTime.now();
+        CalendarUtils.selectDate = LocalDateTime.now();
+        bindingView();
+        bindingAction();
+        init();
     }
 }
