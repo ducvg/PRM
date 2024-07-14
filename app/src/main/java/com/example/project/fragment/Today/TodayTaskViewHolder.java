@@ -71,14 +71,12 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
     }
 
     private void bindingAction() {
-        txtTaskDueDate.setOnClickListener(this::openDatePicker);
-        txtTaskDueTime.setOnClickListener(this::openTimePicker);
+
     }
 
     private void bindingView() {
         txtTaskDate = itemView.findViewById(R.id.txtTaskDate);
         lnlTaskList = itemView.findViewById(R.id.lnlTaskList);
-
         etTaskTitle = popupView.findViewById(R.id.edtitle);
         etTaskDescription = popupView.findViewById(R.id.edtAddDescription);
         spnTaskCategory = popupView.findViewById(R.id.spnCategory);
@@ -113,7 +111,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
     }
 
     private void updateDueTV() {
-        txtTaskDueDate.setText(selectDate.toLocalDate().toString());
+        txtTaskDueDate.setText(String.format("%02d-%02d-%d", selectDate.getMonthValue(), selectDate.getDayOfMonth(), selectDate.getYear()));
         txtTaskDueTime.setText(String.format("%02d:%02d", selectDate.getHour(), selectDate.getMinute()));
     }
 
@@ -132,6 +130,11 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
             String categoryName = db.getCategoryNameById(t.getCategoryId());
             txtCategory.setText(categoryName);
             Log.d("debug setToday data", ""+t.getCategoryId());
+            if(t.getStatus()==0){
+                cbTodo.setChecked(false);
+            }else if(t.getStatus()==1){
+                cbTodo.setChecked(true);
+            }
             lnlTaskList.addView(view);
 
         }
@@ -152,8 +155,6 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
     }
 
     private void showEditDialog(Task task) {
-
-
 
         txtTaskDueDate.setOnClickListener(this::openDatePicker);
         txtTaskDueTime.setOnClickListener(this::openTimePicker);
