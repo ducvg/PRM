@@ -19,6 +19,8 @@ import com.example.project.model.ServiceModel.LoginDTO;
 import com.example.project.model.ServiceModel.TaskDTO;
 import com.example.project.model.ServiceModel.TokenDTO;
 import com.example.project.model.Task;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -69,11 +71,10 @@ public class LoginActivity extends AppCompatActivity {
             ApiService.getUserApiEndpoint()
                     .login(user)
                     .enqueue(new Callback<TokenDTO>() {
-
                         @Override
                         public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
                             AppConfig.token = response.body().getToken();
-                            Log.d("debug login ok token",AppConfig.token);
+                            Log.d("debug login ok token", AppConfig.token);
                             syncCategory();
                             syncTask();
                         }
@@ -120,13 +121,20 @@ public class LoginActivity extends AppCompatActivity {
 
     private void syncTask(){
         List<TaskDTO> userTasks = db.getAllLocalTask();
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+        String json = gson.toJson(userTasks);
+        Log.d("debug sync task", "JSON data sent to server: " + json);
         try {
             ApiService.getTaskApiEndpoint()
                     .updateServer(userTasks)
                     .enqueue(new Callback<List<Task>>() {
                         @Override
                         public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                            Log.d("debug sync task ok",response.message());
                             List<Task> syncedData = response.body();
+                            Log.d("debug sync task ok", response.body().size()+"");
                             db.syncTask(syncedData);
                             Log.d("debug sync api ok", syncedData.toString());
                             Intent intent = new Intent(context, MainActivity.class);
