@@ -94,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("debug login ok token", AppConfig.token);
                             syncCategory();
                             syncTask();
+                            AppConfig.isOffline = false;
                         }
 
                         @Override
