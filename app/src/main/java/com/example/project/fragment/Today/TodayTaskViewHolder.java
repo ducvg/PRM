@@ -94,11 +94,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
                     }
                 }
             });
-            if(t.getStatus()==0){
-                cbTodo.setChecked(false);
-            }else if(t.getStatus()==1){
-                cbTodo.setChecked(true);
-            }
+
         }
     }
     private void bindingItemView (View view){

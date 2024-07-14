@@ -94,7 +94,6 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("debug login ok token", AppConfig.token);
                             syncCategory();
                             syncTask();
-                            AppConfig.isOffline = false;
                         }
 
                         @Override
@@ -145,9 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                     .enqueue(new Callback<List<Task>>() {
                         @Override
                         public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
-                            Log.d("debug sync task ok",response.message());
                             List<Task> syncedData = response.body();
-                            Log.d("debug sync task ok", response.body().size()+"");
                             db.syncTask(syncedData);
                             Log.d("debug sync api ok", syncedData.toString());
                             Intent intent = new Intent(context, MainActivity.class);
