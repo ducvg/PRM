@@ -233,6 +233,8 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
 
     }
 
+
+
     @Override
     public void onClick(View view) {
 
