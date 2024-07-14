@@ -52,7 +52,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
 
 
 
-    public TodayTaskViewHolder(@NonNull View itemView, List<String> days) {
+    public TodayTaskViewHolder(@NonNull View itemView) {
         super(itemView);
         bindingView();
         bindingAction();
@@ -81,7 +81,6 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
             txtDue.setText(t.getDueDate().toString());
             String categoryName = db.getCategoryNameById(t.getCategoryId());
             txtCategory.setText(categoryName);
-            Log.d("debug setToday data", ""+t.getCategoryId());
             lnlTaskList.addView(view);
             txtTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -158,7 +157,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
 
 
 
-        btnUpdate = popupView.findViewById(R.id.btnUpdate);
+        Button btnUpdate = popupView.findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,7 +188,7 @@ public class TodayTaskViewHolder extends RecyclerView.ViewHolder implements View
             }
         });
 
-        btnCancel = popupView.findViewById(R.id.btnCancel);
+        Button btnCancel = popupView.findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

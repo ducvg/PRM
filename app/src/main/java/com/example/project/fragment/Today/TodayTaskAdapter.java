@@ -33,7 +33,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.fragment_task, parent, false);
         db = new SQLiteHelper(parent.getContext());
-        return new TodayTaskViewHolder(view, recentDate);
+        return new TodayTaskViewHolder(view);
     }
 
     @Override
@@ -56,7 +56,6 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskViewHolder> 
                 thisDayTask = new ArrayList<>();
                 break;
         }
-        Log.d("debug today adapter", Arrays.toString(thisDayTask.toArray()));
         holder.setData(date,thisDayTask);
     }
 

@@ -7,9 +7,10 @@ public class TokenDTO {
     @SerializedName("token")
     @Expose
     private String token;
-    @SerializedName("expiresAt")
+    @SerializedName("email")
     @Expose
-    private String expiresAt;
+    private String email;
+
 
     public String getToken() {
         return token;
@@ -19,17 +20,17 @@ public class TokenDTO {
         this.token = token;
     }
 
-    public String getExpiresAt() {
-        return expiresAt;
+    public String getEmail() {
+        return email;
     }
 
-    public void setExpiresAt(String expiresAt) {
-        this.expiresAt = expiresAt;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public TokenDTO(){}
-    public TokenDTO(String token, String expiresAt) {
+    public TokenDTO(String token, String email) {
         this.token = token;
-        this.expiresAt = expiresAt;
+        this.email = email;
     }
 }

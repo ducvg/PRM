@@ -50,36 +50,24 @@
 
         <TextView
             style="@style/viewParent"
-            android:text="Forgot Password?"
+            android:clickable="true"
+            android:id="@+id/txtOffline"
+            android:text="Continue offline"
             android:textColor="@color/primaryTextColor"
             android:textSize="@dimen/newsMoreTextSize"
             android:layout_gravity="end"
             android:layout_marginTop="10dp"/>
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
 
-            <Button
-                android:id="@+id/btnRegister"
-                style="@style/loginButton"
-                android:layout_width="158dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/loginViewsMargin"
-                android:layout_weight="1"
-                android:foregroundGravity="right"
-                android:text="Register" />
 
-            <Button
-                android:id="@+id/btnLogin"
-                style="@style/loginButton"
-                android:layout_width="157dp"
-                android:layout_gravity="end"
-                android:layout_marginTop="@dimen/loginViewsMargin"
-                android:layout_weight="1"
-                android:text="Login" />
-        </GridLayout>
+        <Button
+            android:id="@+id/btnLogin"
+            style="@style/loginButton"
+            android:layout_width="157dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/loginViewsMargin"
+            android:layout_weight="1"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:text="Login" />
 
 
     </LinearLayout>

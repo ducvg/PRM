@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.example.project.fragment.FragmentProfile;
+import com.example.project.fragment.FragmentSettings;
 import com.example.project.fragment.FragmentSearch;
 import com.example.project.fragment.FragmentToday;
 import com.example.project.fragment.FragmentUpcoming;
@@ -22,7 +22,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 0: return new FragmentToday();
             case 1: return new FragmentUpcoming();
             case 2: return new FragmentSearch();
-            case 3: return new FragmentProfile();
+            case 3: return new FragmentSettings();
 
         }
         return null;
